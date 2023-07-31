@@ -377,6 +377,21 @@ func (s *Service) AccountChangeAuthorizationSettings(ctx context.Context, reques
 	return r, err
 }
 
+// AccountInvalidateSignInCodes
+// account.invalidateSignInCodes#ca8ae8ba codes:Vector<string> = Bool;
+func (s *Service) AccountInvalidateSignInCodes(ctx context.Context, request *mtproto.TLAccountInvalidateSignInCodes) (*mtproto.Bool, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("account.invalidateSignInCodes - metadata: %s, request: %s", c.MD.DebugString(), request.DebugString())
+
+	r, err := c.AccountInvalidateSignInCodes(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("account.invalidateSignInCodes - reply: %s", r.DebugString())
+	return r, err
+}
+
 // AccountVerifyEmailECBA39DB
 // account.verifyEmail#ecba39db email:string code:string = Bool;
 func (s *Service) AccountVerifyEmailECBA39DB(ctx context.Context, request *mtproto.TLAccountVerifyEmailECBA39DB) (*mtproto.Bool, error) {
