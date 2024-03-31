@@ -60,13 +60,9 @@ import (
 // auth.signIn#bcd51581 phone_number:string phone_code_hash:string phone_code:string = auth.Authorization;
 func (c *AuthorizationCore) AuthSignIn(in *mtproto.TLAuthSignIn) (*mtproto.Auth_Authorization, error) {
 	var (
-		phoneCode     = in.GetPhoneCode_STRING()
+		phoneCode     = in.GetPhoneCode().GetValue()
 		phoneCodeHash = in.PhoneCodeHash
 	)
-
-	if phoneCode == "" {
-		phoneCode = in.GetPhoneCode_FLAGSTRING().GetValue()
-	}
 
 	if phoneCode == "" || phoneCodeHash == "" {
 		err := mtproto.ErrPhoneCodeEmpty

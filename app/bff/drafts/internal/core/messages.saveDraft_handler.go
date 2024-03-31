@@ -40,8 +40,8 @@ func (c *DraftsCore) MessagesSaveDraft(in *mtproto.TLMessagesSaveDraft) (*mtprot
 
 	if in.NoWebpage == true {
 		isDraftMessageEmpty = false
-	} else if in.ReplyToMsgId != nil {
-		isDraftMessageEmpty = false
+		//} else if in.ReplyToMsgId != nil {
+		//	isDraftMessageEmpty = false
 	} else if in.Message != "" {
 		isDraftMessageEmpty = false
 	} else if in.Entities != nil {
@@ -60,11 +60,10 @@ func (c *DraftsCore) MessagesSaveDraft(in *mtproto.TLMessagesSaveDraft) (*mtprot
 		})
 	} else {
 		draft = mtproto.MakeTLDraftMessage(&mtproto.DraftMessage{
-			NoWebpage:    in.GetNoWebpage(),
-			ReplyToMsgId: in.GetReplyToMsgId(),
-			Message:      in.GetMessage(),
-			Entities:     in.GetEntities(),
-			Date_INT32:   date,
+			NoWebpage:  in.GetNoWebpage(),
+			Message:    in.GetMessage(),
+			Entities:   in.GetEntities(),
+			Date_INT32: date,
 		}).To_DraftMessage()
 
 		c.svcCtx.Dao.DialogClient.DialogSaveDraftMessage(c.ctx, &dialog.TLDialogSaveDraftMessage{

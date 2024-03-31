@@ -28,7 +28,7 @@ func makePeerNotifySettingsByDO(do *dataobject.UserNotifySettingsDO) (settings *
 		settings.MuteUntil = &types.Int32Value{Value: do.MuteUntil}
 	}
 	if do.Sound != "-1" {
-		settings.Sound = &types.StringValue{Value: do.Sound}
+		// settings.Sound = &types.StringValue{Value: do.Sound}
 	}
 	return
 }

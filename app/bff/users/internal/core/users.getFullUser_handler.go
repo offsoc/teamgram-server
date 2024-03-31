@@ -98,8 +98,7 @@ func (c *UsersCore) UsersGetFullUser(in *mtproto.TLUsersGetFullUser) (*mtproto.U
 		BotBroadcastAdminRights: nil,
 		PremiumGifts:            nil,
 		Wallpaper:               nil,
-		Stories_FLAGPEERSTORIES: nil,
-		Stories_FLAGUSERSTORIES: nil,
+		Stories:                 nil,
 	}).To_UserFull()
 
 	// PremiumGifts
@@ -228,7 +227,7 @@ func (c *UsersCore) UsersGetFullUser(in *mtproto.TLUsersGetFullUser) (*mtproto.U
 	if c.svcCtx.Dao.Plugin != nil {
 		userFull.StoriesPinnedAvailable = c.svcCtx.Dao.Plugin.GetStoriesPinnedAvailable(c.ctx, peerId)
 		userFull.BlockedMyStoriesFrom = c.svcCtx.Dao.Plugin.GetBlockedMyStoriesFrom(c.ctx, peerId)
-		userFull.Stories_FLAGPEERSTORIES = c.svcCtx.Dao.Plugin.GetActiveStories(c.ctx, peerId)
+		userFull.Stories = c.svcCtx.Dao.Plugin.GetActiveStories(c.ctx, peerId)
 	}
 
 	return mtproto.MakeTLUsersUserFull(&mtproto.Users_UserFull{

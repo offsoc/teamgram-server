@@ -22,11 +22,16 @@ import (
 	"github.com/teamgram/proto/mtproto"
 )
 
-// AccountVerifyEmailECBA39DB
-// account.verifyEmail#ecba39db email:string code:string = Bool;
-func (c *AuthorizationCore) AccountVerifyEmailECBA39DB(in *mtproto.TLAccountVerifyEmailECBA39DB) (*mtproto.Bool, error) {
+// HelpGetAppConfig
+// help.getAppConfig#61e3f854 hash:int = help.AppConfig;
+func (c *ConfigurationCore) HelpGetAppConfig(in *mtproto.TLHelpGetAppConfig) (*mtproto.Help_AppConfig, error) {
 	// TODO: not impl
-	c.Logger.Errorf("account.verifyEmailECBA39DB blocked, License key from https://teamgram.net required to unlock enterprise features.")
+	c.Logger.Errorf("help.getAppConfig blocked, License key from https://teamgram.net required to unlock enterprise features.")
 
-	return nil, mtproto.ErrEnterpriseIsBlocked
+	return mtproto.MakeTLHelpAppConfig(&mtproto.Help_AppConfig{
+		Hash: 0,
+		Config: mtproto.MakeTLJsonObject(&mtproto.JSONValue{
+			Value_VECTORJSONOBJECTVALUE: []*mtproto.JSONObjectValue{},
+		}).To_JSONValue(),
+	}).To_Help_AppConfig(), nil
 }

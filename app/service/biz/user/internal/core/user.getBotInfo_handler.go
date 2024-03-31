@@ -27,11 +27,9 @@ func (c *UserCore) UserGetBotInfo(in *user.TLUserGetBotInfo) (*mtproto.BotInfo, 
 	}
 
 	botInfo := mtproto.MakeTLBotInfo(&mtproto.BotInfo{
-		UserId_INT64:           in.BotId,
-		UserId_FLAGINT64:       mtproto.MakeFlagsInt64(in.BotId),
-		Description_STRING:     botsDO.Description,
-		Description_FLAGSTRING: mtproto.MakeFlagsString(botsDO.Description),
-		Commands:               []*mtproto.BotCommand{},
+		UserId:      mtproto.MakeFlagsInt64(in.BotId),
+		Description: mtproto.MakeFlagsString(botsDO.Description),
+		Commands:    []*mtproto.BotCommand{},
 	}).To_BotInfo()
 
 	c.svcCtx.Dao.BotCommandsDAO.SelectListWithCB(

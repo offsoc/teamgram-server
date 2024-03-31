@@ -76,7 +76,13 @@ func (c *AccountCore) AccountUpdateProfile(in *mtproto.TLAccountUpdateProfile) (
 					UserId:    c.MD.UserId,
 					FirstName: in.GetFirstName().GetValue(),
 					LastName:  in.GetLastName().GetValue(),
-					Username:  me.Username(),
+					Usernames: []*mtproto.Username{
+						mtproto.MakeTLUsername(&mtproto.Username{
+							Editable: false,
+							Active:   false,
+							Username: me.Username(),
+						}).To_Username(),
+					},
 				}).To_Update()),
 			})
 		}

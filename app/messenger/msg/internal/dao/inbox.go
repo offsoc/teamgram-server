@@ -75,9 +75,7 @@ func (d *Dao) sendMessageToInbox(ctx context.Context, fromId int64, peer *mtprot
 		if replyId, _ := d.MessagesDAO.SelectPeerUserMessage(ctx, toUserId, fromId, message.GetReplyTo().GetFixedReplyToMsgId()); replyId != nil {
 			// message.ReplyToMsgId.Value = replyId.UserMessageBoxId
 			if message.ReplyTo != nil {
-				message.ReplyTo.ReplyToMsgId = replyId.UserMessageBoxId
-				message.ReplyTo.ReplyToMsgId_INT32 = replyId.UserMessageBoxId
-				message.ReplyTo.ReplyToMsgId_FLAGINT32 = mtproto.MakeFlagsInt32(replyId.UserMessageBoxId)
+				message.ReplyTo.ReplyToMsgId = mtproto.MakeFlagsInt32(replyId.UserMessageBoxId)
 			}
 
 			if peer.PeerType == mtproto.PEER_CHAT && replyId.SenderUserId == toUserId {

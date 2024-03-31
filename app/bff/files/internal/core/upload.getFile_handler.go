@@ -28,13 +28,9 @@ import (
 func (c *FilesCore) UploadGetFile(in *mtproto.TLUploadGetFile) (*mtproto.Upload_File, error) {
 	var (
 		location = in.GetLocation()
-		offset   = in.GetOffset_INT64()
+		offset   = in.GetOffset()
 		limit    = in.GetLimit()
 	)
-
-	if offset == 0 {
-		offset = int64(in.GetOffset_INT32())
-	}
 
 	switch location.GetPredicateName() {
 	case mtproto.Predicate_inputFileLocation:

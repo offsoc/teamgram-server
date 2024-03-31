@@ -48,7 +48,7 @@ func (c *NotificationCore) AccountResetNotifySettings(in *mtproto.TLAccountReset
 				ShowPreviews: mtproto.BoolTrue,
 				Silent:       mtproto.BoolFalse,
 				MuteUntil:    &types.Int32Value{Value: 0},
-				Sound:        &types.StringValue{Value: "default"},
+				// Sound:        &types.StringValue{Value: "default"},
 			}).To_PeerNotifySettings(),
 		}).To_Update())
 		c.svcCtx.Dao.SyncClient.SyncUpdatesNotMe(c.ctx, &sync.TLSyncUpdatesNotMe{

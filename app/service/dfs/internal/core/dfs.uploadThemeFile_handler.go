@@ -166,8 +166,7 @@ func (c *DfsCore) DfsUploadThemeFile(in *dfs.TLDfsUploadThemeFile) (*mtproto.Doc
 		FileReference: []byte{}, // TODO(@benqi): gen file_reference
 		Date:          int32(time.Now().Unix()),
 		MimeType:      in.GetMimeType(),
-		Size2_INT32:   int32(fileInfo.GetFileSize()),
-		Size2_INT64:   fileInfo.GetFileSize(),
+		Size2:         fileInfo.GetFileSize(),
 		Thumbs:        thumbSizeList,
 		VideoThumbs:   nil,
 		DcId:          1,

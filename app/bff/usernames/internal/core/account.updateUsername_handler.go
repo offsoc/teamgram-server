@@ -61,7 +61,13 @@ func (c *UsernamesCore) AccountUpdateUsername(in *mtproto.TLAccountUpdateUsernam
 					UserId:    c.MD.UserId,
 					FirstName: me.FirstName(),
 					LastName:  me.LastName(),
-					Username:  username2,
+					Usernames: []*mtproto.Username{
+						mtproto.MakeTLUsername(&mtproto.Username{
+							Editable: false,
+							Active:   false,
+							Username: me.Username(),
+						}).To_Username(),
+					},
 				}).To_Update()),
 			})
 		}

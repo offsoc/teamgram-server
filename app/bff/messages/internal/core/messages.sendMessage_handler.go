@@ -108,41 +108,22 @@ func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*
 		outMessage.SavedPeerId = peer.ToPeer()
 	}
 
-	// Fix ReplyToMsgId
-	if in.GetReplyToMsgId() != nil {
-		outMessage.ReplyTo = mtproto.MakeTLMessageReplyHeader(&mtproto.MessageReplyHeader{
-			ReplyToScheduled:       false,
-			ForumTopic:             false,
-			Quote:                  false,
-			ReplyToMsgId:           in.GetReplyToMsgId().GetValue(),
-			ReplyToMsgId_INT32:     in.GetReplyToMsgId().GetValue(),
-			ReplyToMsgId_FLAGINT32: in.GetReplyToMsgId(),
-			ReplyToPeerId:          nil,
-			ReplyFrom:              nil,
-			ReplyMedia:             nil,
-			ReplyToTopId:           nil,
-			QuoteText:              nil,
-			QuoteEntities:          nil,
-			QuoteOffset:            nil,
-		}).To_MessageReplyHeader()
-	} else if in.GetReplyTo() != nil {
+	if in.GetReplyTo() != nil {
 		switch in.ReplyTo.PredicateName {
 		case mtproto.Predicate_inputReplyToMessage:
 			replyTo := in.GetReplyTo()
 			outMessage.ReplyTo = mtproto.MakeTLMessageReplyHeader(&mtproto.MessageReplyHeader{
-				ReplyToScheduled:       false,
-				ForumTopic:             false,
-				Quote:                  false,
-				ReplyToMsgId:           replyTo.GetReplyToMsgId(),
-				ReplyToMsgId_INT32:     replyTo.GetReplyToMsgId(),
-				ReplyToMsgId_FLAGINT32: mtproto.MakeFlagsInt32(replyTo.GetReplyToMsgId()),
-				ReplyToPeerId:          nil,
-				ReplyFrom:              nil,
-				ReplyMedia:             nil,
-				ReplyToTopId:           nil,
-				QuoteText:              nil,
-				QuoteEntities:          nil,
-				QuoteOffset:            nil,
+				ReplyToScheduled: false,
+				ForumTopic:       false,
+				Quote:            false,
+				ReplyToMsgId:     mtproto.MakeFlagsInt32(replyTo.GetReplyToMsgId()),
+				ReplyToPeerId:    nil,
+				ReplyFrom:        nil,
+				ReplyMedia:       nil,
+				ReplyToTopId:     nil,
+				QuoteText:        nil,
+				QuoteEntities:    nil,
+				QuoteOffset:      nil,
 			}).To_MessageReplyHeader()
 			if replyTo.GetQuoteText() != nil {
 				outMessage.ReplyTo.Quote = true

@@ -2,7 +2,7 @@
  * WARNING! All changes made in this file will be lost!
  * Created from 'scheme.tl' by 'mtprotoc'
  *
- * Copyright 2022 Teamgram Authors.
+ * Copyright 2024 Teamgram Authors.
  *  All rights reserved.
  *
  * Author: teamgramio (teamgram.io@gmail.com)
@@ -33,7 +33,7 @@ func (s *Service) AuthSendCode(ctx context.Context, request *mtproto.TLAuthSendC
 }
 
 // AuthSignUp
-// auth.signUp#80eee427 phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
+// auth.signUp#aac7b717 flags:# no_joined_notifications:flags.0?true phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
 func (s *Service) AuthSignUp(ctx context.Context, request *mtproto.TLAuthSignUp) (*mtproto.Auth_Authorization, error) {
 	c := core.New(ctx, s.svcCtx)
 	c.Logger.Debugf("auth.signUp - metadata: %s, request: %s", c.MD.DebugString(), request.DebugString())
@@ -317,18 +317,18 @@ func (s *Service) AccountSendVerifyEmailCode(ctx context.Context, request *mtpro
 	return r, err
 }
 
-// AccountVerifyEmail32DA4CF
+// AccountVerifyEmail
 // account.verifyEmail#32da4cf purpose:EmailVerifyPurpose verification:EmailVerification = account.EmailVerified;
-func (s *Service) AccountVerifyEmail32DA4CF(ctx context.Context, request *mtproto.TLAccountVerifyEmail32DA4CF) (*mtproto.Account_EmailVerified, error) {
+func (s *Service) AccountVerifyEmail(ctx context.Context, request *mtproto.TLAccountVerifyEmail) (*mtproto.Account_EmailVerified, error) {
 	c := core.New(ctx, s.svcCtx)
-	c.Logger.Debugf("account.verifyEmail32DA4CF - metadata: %s, request: %s", c.MD.DebugString(), request.DebugString())
+	c.Logger.Debugf("account.verifyEmail - metadata: %s, request: %s", c.MD.DebugString(), request.DebugString())
 
-	r, err := c.AccountVerifyEmail32DA4CF(request)
+	r, err := c.AccountVerifyEmail(request)
 	if err != nil {
 		return nil, err
 	}
 
-	c.Logger.Debugf("account.verifyEmail32DA4CF - reply: %s", r.DebugString())
+	c.Logger.Debugf("account.verifyEmail - reply: %s", r.DebugString())
 	return r, err
 }
 
@@ -389,21 +389,6 @@ func (s *Service) AccountInvalidateSignInCodes(ctx context.Context, request *mtp
 	}
 
 	c.Logger.Debugf("account.invalidateSignInCodes - reply: %s", r.DebugString())
-	return r, err
-}
-
-// AccountVerifyEmailECBA39DB
-// account.verifyEmail#ecba39db email:string code:string = Bool;
-func (s *Service) AccountVerifyEmailECBA39DB(ctx context.Context, request *mtproto.TLAccountVerifyEmailECBA39DB) (*mtproto.Bool, error) {
-	c := core.New(ctx, s.svcCtx)
-	c.Logger.Debugf("account.verifyEmailECBA39DB - metadata: %s, request: %s", c.MD.DebugString(), request.DebugString())
-
-	r, err := c.AccountVerifyEmailECBA39DB(request)
-	if err != nil {
-		return nil, err
-	}
-
-	c.Logger.Debugf("account.verifyEmailECBA39DB - reply: %s", r.DebugString())
 	return r, err
 }
 

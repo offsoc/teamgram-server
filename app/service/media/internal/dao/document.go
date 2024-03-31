@@ -94,8 +94,7 @@ func (m *Dao) MakeDocumentByDO(
 		document.Date = int32(time.Now().Unix())
 	}
 	document.MimeType = do.MimeType
-	document.Size2_INT32 = int32(do.FileSize)
-	document.Size2_INT64 = do.FileSize
+	document.Size2 = do.FileSize
 
 	if do.ThumbId != 0 && do.VideoThumbId != 0 {
 		if len(thumbs) > 0 && len(videoThumbs) > 0 {

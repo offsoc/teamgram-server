@@ -12,7 +12,7 @@ require (
 	github.com/oschwald/geoip2-golang v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/teamgram/marmota v0.1.19
-	github.com/teamgram/proto v0.174.0
+	github.com/teamgram/proto v1.0.0
 	github.com/zeromicro/go-zero v1.6.0
 	google.golang.org/grpc v1.59.0
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
@@ -133,7 +133,5 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-// replace github.com/teamgram/proto => ../proto
 
 replace github.com/zeromicro/go-zero v1.6.0 => github.com/teamgram/go-zero v1.6.0-teamgram

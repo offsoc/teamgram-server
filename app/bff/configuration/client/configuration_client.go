@@ -26,12 +26,10 @@ type ConfigurationClient interface {
 	HelpGetAppUpdate(ctx context.Context, in *mtproto.TLHelpGetAppUpdate) (*mtproto.Help_AppUpdate, error)
 	HelpGetInviteText(ctx context.Context, in *mtproto.TLHelpGetInviteText) (*mtproto.Help_InviteText, error)
 	HelpGetSupport(ctx context.Context, in *mtproto.TLHelpGetSupport) (*mtproto.Help_Support, error)
-	HelpGetAppConfig61E3F854(ctx context.Context, in *mtproto.TLHelpGetAppConfig61E3F854) (*mtproto.Help_AppConfig, error)
 	HelpGetSupportName(ctx context.Context, in *mtproto.TLHelpGetSupportName) (*mtproto.Help_SupportName, error)
 	HelpDismissSuggestion(ctx context.Context, in *mtproto.TLHelpDismissSuggestion) (*mtproto.Bool, error)
 	HelpGetCountriesList(ctx context.Context, in *mtproto.TLHelpGetCountriesList) (*mtproto.Help_CountriesList, error)
-	HelpGetAppChangelog(ctx context.Context, in *mtproto.TLHelpGetAppChangelog) (*mtproto.Updates, error)
-	HelpGetAppConfig98914110(ctx context.Context, in *mtproto.TLHelpGetAppConfig98914110) (*mtproto.JSONValue, error)
+	HelpGetAppConfig(ctx context.Context, in *mtproto.TLHelpGetAppConfig) (*mtproto.Help_AppConfig, error)
 }
 
 type defaultConfigurationClient struct {
@@ -79,13 +77,6 @@ func (m *defaultConfigurationClient) HelpGetSupport(ctx context.Context, in *mtp
 	return client.HelpGetSupport(ctx, in)
 }
 
-// HelpGetAppConfig61E3F854
-// help.getAppConfig#61e3f854 hash:int = help.AppConfig;
-func (m *defaultConfigurationClient) HelpGetAppConfig61E3F854(ctx context.Context, in *mtproto.TLHelpGetAppConfig61E3F854) (*mtproto.Help_AppConfig, error) {
-	client := mtproto.NewRPCConfigurationClient(m.cli.Conn())
-	return client.HelpGetAppConfig61E3F854(ctx, in)
-}
-
 // HelpGetSupportName
 // help.getSupportName#d360e72c = help.SupportName;
 func (m *defaultConfigurationClient) HelpGetSupportName(ctx context.Context, in *mtproto.TLHelpGetSupportName) (*mtproto.Help_SupportName, error) {
@@ -107,16 +98,9 @@ func (m *defaultConfigurationClient) HelpGetCountriesList(ctx context.Context, i
 	return client.HelpGetCountriesList(ctx, in)
 }
 
-// HelpGetAppChangelog
-// help.getAppChangelog#9010ef6f prev_app_version:string = Updates;
-func (m *defaultConfigurationClient) HelpGetAppChangelog(ctx context.Context, in *mtproto.TLHelpGetAppChangelog) (*mtproto.Updates, error) {
+// HelpGetAppConfig
+// help.getAppConfig#61e3f854 hash:int = help.AppConfig;
+func (m *defaultConfigurationClient) HelpGetAppConfig(ctx context.Context, in *mtproto.TLHelpGetAppConfig) (*mtproto.Help_AppConfig, error) {
 	client := mtproto.NewRPCConfigurationClient(m.cli.Conn())
-	return client.HelpGetAppChangelog(ctx, in)
-}
-
-// HelpGetAppConfig98914110
-// help.getAppConfig#98914110 = JSONValue;
-func (m *defaultConfigurationClient) HelpGetAppConfig98914110(ctx context.Context, in *mtproto.TLHelpGetAppConfig98914110) (*mtproto.JSONValue, error) {
-	client := mtproto.NewRPCConfigurationClient(m.cli.Conn())
-	return client.HelpGetAppConfig98914110(ctx, in)
+	return client.HelpGetAppConfig(ctx, in)
 }

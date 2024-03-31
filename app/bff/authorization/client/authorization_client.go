@@ -2,7 +2,7 @@
  * WARNING! All changes made in this file will be lost!
  * Created from 'scheme.tl' by 'mtprotoc'
  *
- * Copyright 2022 Teamgram Authors.
+ * Copyright 2024 Teamgram Authors.
  *  All rights reserved.
  *
  * Author: teamgramio (teamgram.io@gmail.com)
@@ -41,12 +41,11 @@ type AuthorizationClient interface {
 	AuthRequestFirebaseSms(ctx context.Context, in *mtproto.TLAuthRequestFirebaseSms) (*mtproto.Bool, error)
 	AuthResetLoginEmail(ctx context.Context, in *mtproto.TLAuthResetLoginEmail) (*mtproto.Auth_SentCode, error)
 	AccountSendVerifyEmailCode(ctx context.Context, in *mtproto.TLAccountSendVerifyEmailCode) (*mtproto.Account_SentEmailCode, error)
-	AccountVerifyEmail32DA4CF(ctx context.Context, in *mtproto.TLAccountVerifyEmail32DA4CF) (*mtproto.Account_EmailVerified, error)
+	AccountVerifyEmail(ctx context.Context, in *mtproto.TLAccountVerifyEmail) (*mtproto.Account_EmailVerified, error)
 	AccountResetPassword(ctx context.Context, in *mtproto.TLAccountResetPassword) (*mtproto.Account_ResetPasswordResult, error)
 	AccountSetAuthorizationTTL(ctx context.Context, in *mtproto.TLAccountSetAuthorizationTTL) (*mtproto.Bool, error)
 	AccountChangeAuthorizationSettings(ctx context.Context, in *mtproto.TLAccountChangeAuthorizationSettings) (*mtproto.Bool, error)
 	AccountInvalidateSignInCodes(ctx context.Context, in *mtproto.TLAccountInvalidateSignInCodes) (*mtproto.Bool, error)
-	AccountVerifyEmailECBA39DB(ctx context.Context, in *mtproto.TLAccountVerifyEmailECBA39DB) (*mtproto.Bool, error)
 	AuthToggleBan(ctx context.Context, in *mtproto.TLAuthToggleBan) (*mtproto.PredefinedUser, error)
 }
 
@@ -68,7 +67,7 @@ func (m *defaultAuthorizationClient) AuthSendCode(ctx context.Context, in *mtpro
 }
 
 // AuthSignUp
-// auth.signUp#80eee427 phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
+// auth.signUp#aac7b717 flags:# no_joined_notifications:flags.0?true phone_number:string phone_code_hash:string first_name:string last_name:string = auth.Authorization;
 func (m *defaultAuthorizationClient) AuthSignUp(ctx context.Context, in *mtproto.TLAuthSignUp) (*mtproto.Auth_Authorization, error) {
 	client := mtproto.NewRPCAuthorizationClient(m.cli.Conn())
 	return client.AuthSignUp(ctx, in)
@@ -200,11 +199,11 @@ func (m *defaultAuthorizationClient) AccountSendVerifyEmailCode(ctx context.Cont
 	return client.AccountSendVerifyEmailCode(ctx, in)
 }
 
-// AccountVerifyEmail32DA4CF
+// AccountVerifyEmail
 // account.verifyEmail#32da4cf purpose:EmailVerifyPurpose verification:EmailVerification = account.EmailVerified;
-func (m *defaultAuthorizationClient) AccountVerifyEmail32DA4CF(ctx context.Context, in *mtproto.TLAccountVerifyEmail32DA4CF) (*mtproto.Account_EmailVerified, error) {
+func (m *defaultAuthorizationClient) AccountVerifyEmail(ctx context.Context, in *mtproto.TLAccountVerifyEmail) (*mtproto.Account_EmailVerified, error) {
 	client := mtproto.NewRPCAuthorizationClient(m.cli.Conn())
-	return client.AccountVerifyEmail32DA4CF(ctx, in)
+	return client.AccountVerifyEmail(ctx, in)
 }
 
 // AccountResetPassword
@@ -233,13 +232,6 @@ func (m *defaultAuthorizationClient) AccountChangeAuthorizationSettings(ctx cont
 func (m *defaultAuthorizationClient) AccountInvalidateSignInCodes(ctx context.Context, in *mtproto.TLAccountInvalidateSignInCodes) (*mtproto.Bool, error) {
 	client := mtproto.NewRPCAuthorizationClient(m.cli.Conn())
 	return client.AccountInvalidateSignInCodes(ctx, in)
-}
-
-// AccountVerifyEmailECBA39DB
-// account.verifyEmail#ecba39db email:string code:string = Bool;
-func (m *defaultAuthorizationClient) AccountVerifyEmailECBA39DB(ctx context.Context, in *mtproto.TLAccountVerifyEmailECBA39DB) (*mtproto.Bool, error) {
-	client := mtproto.NewRPCAuthorizationClient(m.cli.Conn())
-	return client.AccountVerifyEmailECBA39DB(ctx, in)
 }
 
 // AuthToggleBan

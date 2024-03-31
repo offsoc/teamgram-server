@@ -1,4 +1,4 @@
-// Copyright 2022 Teamgram Authors
+// Copyright 2024 Teamgram Authors
 //  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,26 +19,14 @@
 package core
 
 import (
-	"time"
-
 	"github.com/teamgram/proto/mtproto"
 )
 
-// HelpGetAppChangelog
-// help.getAppChangelog#9010ef6f prev_app_version:string = Updates;
-func (c *ConfigurationCore) HelpGetAppChangelog(in *mtproto.TLHelpGetAppChangelog) (*mtproto.Updates, error) {
+// AccountVerifyEmail
+// account.verifyEmail#32da4cf purpose:EmailVerifyPurpose verification:EmailVerification = account.EmailVerified;
+func (c *AuthorizationCore) AccountVerifyEmail(in *mtproto.TLAccountVerifyEmail) (*mtproto.Account_EmailVerified, error) {
 	// TODO: not impl
-	c.Logger.Errorf("help.getAppChangelog blocked, License key from https://teamgram.net required to unlock enterprise features.")
+	c.Logger.Errorf("account.verifyEmail blocked, License key from https://teamgram.net required to unlock enterprise features.")
 
-	_ = in.GetPrevAppVersion()
-
-	rValue := mtproto.MakeTLUpdates(&mtproto.Updates{
-		Updates: []*mtproto.Update{},
-		Users:   []*mtproto.User{},
-		Chats:   []*mtproto.Chat{},
-		Date:    int32(time.Now().Unix()),
-		Seq:     0,
-	}).To_Updates()
-
-	return rValue, nil
+	return nil, mtproto.ErrEnterpriseIsBlocked
 }

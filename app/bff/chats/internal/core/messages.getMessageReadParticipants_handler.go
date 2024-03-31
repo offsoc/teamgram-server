@@ -1,4 +1,4 @@
-// Copyright 2022 Teamgram Authors
+// Copyright 2024 Teamgram Authors
 //  All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,9 @@ import (
 	"github.com/teamgram/teamgram-server/app/service/biz/message/message"
 )
 
-// MessagesGetMessageReadParticipants31C1C44F
+// MessagesGetMessageReadParticipants
 // messages.getMessageReadParticipants#31c1c44f peer:InputPeer msg_id:int = Vector<ReadParticipantDate>;
-func (c *ChatsCore) MessagesGetMessageReadParticipants31C1C44F(in *mtproto.TLMessagesGetMessageReadParticipants31C1C44F) (*mtproto.Vector_ReadParticipantDate, error) {
+func (c *ChatsCore) MessagesGetMessageReadParticipants(in *mtproto.TLMessagesGetMessageReadParticipants) (*mtproto.Vector_ReadParticipantDate, error) {
 	var (
 		peer                 = mtproto.FromInputPeer2(c.MD.UserId, in.Peer)
 		readParticipantDates = make([]*mtproto.ReadParticipantDate, 0)

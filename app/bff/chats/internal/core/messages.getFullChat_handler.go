@@ -60,25 +60,24 @@ func (c *ChatsCore) MessagesGetFullChat(in *mtproto.TLMessagesGetFullChat) (*mtp
 
 	dlg := dialog2.Datas[0].GetDialog()
 	chatFull := mtproto.MakeTLChatFull(&mtproto.ChatFull{
-		CanSetUsername:                       true,
-		HasScheduled:                         false, // TODO
-		Id:                                   chat.Id(),
-		About:                                chat.About(),
-		Participants:                         chat.ToChatParticipants(c.MD.UserId),
-		ChatPhoto:                            chat.Photo(),
-		NotifySettings:                       nil,
-		ExportedInvite:                       nil, // TODO
-		BotInfo:                              nil, // TODO
-		PinnedMsgId:                          nil, // TODO
-		FolderId:                             dlg.FolderId,
-		Call:                                 chat.Call(),
-		TtlPeriod:                            mtproto.MakeFlagsInt32(chat.TTLPeriod()), // TODO
-		GroupcallDefaultJoinAs:               nil,                                      // TODO
-		ThemeEmoticon:                        nil,                                      // TODO
-		RequestsPending:                      nil,                                      // TODO
-		RecentRequesters:                     nil,                                      // TODO
-		AvailableReactions_FLAGVECTORSTRING:  chat.GetChat().GetAvailableReactions(),
-		AvailableReactions_FLAGCHATREACTIONS: chat.AvailableReactions(),
+		CanSetUsername:         true,
+		HasScheduled:           false, // TODO
+		Id:                     chat.Id(),
+		About:                  chat.About(),
+		Participants:           chat.ToChatParticipants(c.MD.UserId),
+		ChatPhoto:              chat.Photo(),
+		NotifySettings:         nil,
+		ExportedInvite:         nil, // TODO
+		BotInfo:                nil, // TODO
+		PinnedMsgId:            nil, // TODO
+		FolderId:               dlg.FolderId,
+		Call:                   chat.Call(),
+		TtlPeriod:              mtproto.MakeFlagsInt32(chat.TTLPeriod()), // TODO
+		GroupcallDefaultJoinAs: nil,                                      // TODO
+		ThemeEmoticon:          nil,                                      // TODO
+		RequestsPending:        nil,                                      // TODO
+		RecentRequesters:       nil,                                      // TODO
+		AvailableReactions:     chat.AvailableReactions(),
 	}).To_ChatFull()
 
 	var (

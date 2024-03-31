@@ -64,7 +64,7 @@ func (d *Dao) GetUserNotifySettings(ctx context.Context, id int64, peerType int3
 					notifySettings.ShowPreviews = mtproto.BoolTrue
 					notifySettings.Silent = mtproto.BoolFalse
 					notifySettings.MuteUntil = &types.Int32Value{Value: 0}
-					notifySettings.Sound = &types.StringValue{Value: "default"}
+					// notifySettings.Sound = &types.StringValue{Value: "default"}
 				}
 			} else {
 				setPeerNotifySettingsByDO(notifySettings, do)
@@ -90,7 +90,7 @@ func setPeerNotifySettingsByDO(settings *mtproto.PeerNotifySettings, do *dataobj
 		settings.MuteUntil = &types.Int32Value{Value: do.MuteUntil}
 	}
 	if do.Sound != "-1" {
-		settings.Sound = &types.StringValue{Value: do.Sound}
+		// settings.Sound = &types.StringValue{Value: do.Sound}
 	}
 }
 
@@ -123,11 +123,12 @@ func makeDOByPeerNotifySettings(settings *mtproto.PeerNotifySettings) (doMap map
 		doMap["mute_until"] = -1
 	}
 
-	if settings.Sound != nil {
-		doMap["sound"] = settings.Sound.Value
-	} else {
-		doMap["sound"] = "-1"
-	}
+	//if settings.Sound != nil {
+	//	doMap["sound"] = settings.Sound.Value
+	//} else {
+	//	doMap["sound"] = "-1"
+	//}
+	doMap["sound"] = "-1"
 
 	return
 }

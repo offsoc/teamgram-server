@@ -18,12 +18,7 @@ import (
 // UserSetGlobalPrivacySettings
 // user.setGlobalPrivacySettings user_id:int settings:GlobalPrivacySettings = Bool;
 func (c *UserCore) UserSetGlobalPrivacySettings(in *user.TLUserSetGlobalPrivacySettings) (*mtproto.Bool, error) {
-	var archiveAndMuteNewNoncontactPeers bool
-	if in.GetSettings().GetArchiveAndMuteNewNoncontactPeers_FLAGBOOL() != nil {
-		archiveAndMuteNewNoncontactPeers = mtproto.FromBool(in.GetSettings().GetArchiveAndMuteNewNoncontactPeers_FLAGBOOL())
-	} else {
-		archiveAndMuteNewNoncontactPeers = in.GetSettings().GetArchiveAndMuteNewNoncontactPeers_FLAGBOOLEAN()
-	}
+	archiveAndMuteNewNoncontactPeers := in.GetSettings().GetArchiveAndMuteNewNoncontactPeers()
 
 	// TODO: globalPrivacySettings#734c4ccb flags:#
 	// 	archive_and_mute_new_noncontact_peers:flags.0?true

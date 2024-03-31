@@ -86,8 +86,7 @@ func (c *ContactsCore) ContactsUnblock(in *mtproto.TLContactsUnblock) (*mtproto.
 	idHelper.AppendUsers(unblockId.PeerId)
 
 	syncUpdates := mtproto.MakeUpdatesByUpdates(mtproto.MakeTLUpdatePeerBlocked(&mtproto.Update{
-		Blocked_BOOL:         mtproto.BoolFalse,
-		Blocked_FLAGBOOLEAN:  false,
+		Blocked:              false,
 		BlockedMyStoriesFrom: false,
 		PeerId:               unblockId.ToPeer(),
 	}).To_Update())

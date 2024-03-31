@@ -2,7 +2,7 @@
  * WARNING! All changes made in this file will be lost!
  * Created from 'scheme.tl' by 'mtprotoc'
  *
- * Copyright 2022 Teamgram Authors.
+ * Copyright 2024 Teamgram Authors.
  *  All rights reserved.
  *
  * Author: teamgramio (teamgram.io@gmail.com)
@@ -31,13 +31,11 @@ type ChatsClient interface {
 	MessagesEditChatAdmin(ctx context.Context, in *mtproto.TLMessagesEditChatAdmin) (*mtproto.Bool, error)
 	MessagesMigrateChat(ctx context.Context, in *mtproto.TLMessagesMigrateChat) (*mtproto.Updates, error)
 	MessagesGetCommonChats(ctx context.Context, in *mtproto.TLMessagesGetCommonChats) (*mtproto.Messages_Chats, error)
-	MessagesGetAllChats(ctx context.Context, in *mtproto.TLMessagesGetAllChats) (*mtproto.Messages_Chats, error)
 	MessagesEditChatAbout(ctx context.Context, in *mtproto.TLMessagesEditChatAbout) (*mtproto.Bool, error)
 	MessagesEditChatDefaultBannedRights(ctx context.Context, in *mtproto.TLMessagesEditChatDefaultBannedRights) (*mtproto.Updates, error)
 	MessagesDeleteChat(ctx context.Context, in *mtproto.TLMessagesDeleteChat) (*mtproto.Bool, error)
-	MessagesGetMessageReadParticipants31C1C44F(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants31C1C44F) (*mtproto.Vector_ReadParticipantDate, error)
+	MessagesGetMessageReadParticipants(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants) (*mtproto.Vector_ReadParticipantDate, error)
 	ChannelsConvertToGigagroup(ctx context.Context, in *mtproto.TLChannelsConvertToGigagroup) (*mtproto.Updates, error)
-	MessagesGetMessageReadParticipants2C6F97B7(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants2C6F97B7) (*mtproto.Vector_Long, error)
 }
 
 type defaultChatsClient struct {
@@ -120,13 +118,6 @@ func (m *defaultChatsClient) MessagesGetCommonChats(ctx context.Context, in *mtp
 	return client.MessagesGetCommonChats(ctx, in)
 }
 
-// MessagesGetAllChats
-// messages.getAllChats#875f74be except_ids:Vector<long> = messages.Chats;
-func (m *defaultChatsClient) MessagesGetAllChats(ctx context.Context, in *mtproto.TLMessagesGetAllChats) (*mtproto.Messages_Chats, error) {
-	client := mtproto.NewRPCChatsClient(m.cli.Conn())
-	return client.MessagesGetAllChats(ctx, in)
-}
-
 // MessagesEditChatAbout
 // messages.editChatAbout#def60797 peer:InputPeer about:string = Bool;
 func (m *defaultChatsClient) MessagesEditChatAbout(ctx context.Context, in *mtproto.TLMessagesEditChatAbout) (*mtproto.Bool, error) {
@@ -148,11 +139,11 @@ func (m *defaultChatsClient) MessagesDeleteChat(ctx context.Context, in *mtproto
 	return client.MessagesDeleteChat(ctx, in)
 }
 
-// MessagesGetMessageReadParticipants31C1C44F
+// MessagesGetMessageReadParticipants
 // messages.getMessageReadParticipants#31c1c44f peer:InputPeer msg_id:int = Vector<ReadParticipantDate>;
-func (m *defaultChatsClient) MessagesGetMessageReadParticipants31C1C44F(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants31C1C44F) (*mtproto.Vector_ReadParticipantDate, error) {
+func (m *defaultChatsClient) MessagesGetMessageReadParticipants(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants) (*mtproto.Vector_ReadParticipantDate, error) {
 	client := mtproto.NewRPCChatsClient(m.cli.Conn())
-	return client.MessagesGetMessageReadParticipants31C1C44F(ctx, in)
+	return client.MessagesGetMessageReadParticipants(ctx, in)
 }
 
 // ChannelsConvertToGigagroup
@@ -160,11 +151,4 @@ func (m *defaultChatsClient) MessagesGetMessageReadParticipants31C1C44F(ctx cont
 func (m *defaultChatsClient) ChannelsConvertToGigagroup(ctx context.Context, in *mtproto.TLChannelsConvertToGigagroup) (*mtproto.Updates, error) {
 	client := mtproto.NewRPCChatsClient(m.cli.Conn())
 	return client.ChannelsConvertToGigagroup(ctx, in)
-}
-
-// MessagesGetMessageReadParticipants2C6F97B7
-// messages.getMessageReadParticipants#2c6f97b7 peer:InputPeer msg_id:int = Vector<long>;
-func (m *defaultChatsClient) MessagesGetMessageReadParticipants2C6F97B7(ctx context.Context, in *mtproto.TLMessagesGetMessageReadParticipants2C6F97B7) (*mtproto.Vector_Long, error) {
-	client := mtproto.NewRPCChatsClient(m.cli.Conn())
-	return client.MessagesGetMessageReadParticipants2C6F97B7(ctx, in)
 }
