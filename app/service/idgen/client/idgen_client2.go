@@ -182,7 +182,12 @@ func (m *IDGenClient2) NextNPtsId(ctx context.Context, key int64, n int) (seq in
 }
 
 func (m *IDGenClient2) CurrentPtsId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getCurrentSeqId(ctx, ptsUpdatesNgenId+strconv.FormatInt(key, 10)))
+	id := m.getCurrentSeqId(ctx, ptsUpdatesNgenId+strconv.FormatInt(key, 10))
+	if id > math.MaxInt32 || id < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("idgen.getCurrentSeqId - value out of int32 range: %d", id)
+		return 0 // or handle the error as appropriate
+	}
+	seq = int32(id)
 	return
 }
 
