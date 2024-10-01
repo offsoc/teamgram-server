@@ -81,17 +81,17 @@ func (d *Dao) GetFileInfo(ctx context.Context, ownerId, fileId int64) (fileInfo 
 		case "file_name":
 			fileInfo.FileName = v
 		case "file_total_parts":
-			fileTotalParts, _ := strconv.Atoi(v)
-			fileInfo.FileTotalParts = fileTotalParts
+			fileTotalParts, _ := strconv.ParseInt(v, 10, 32)
+			fileInfo.FileTotalParts = int(fileTotalParts)
 		case "first_file_part_size":
-			firstFilePartSize, _ := strconv.Atoi(v)
-			fileInfo.FirstFilePartSize = firstFilePartSize
+			firstFilePartSize, _ := strconv.ParseInt(v, 10, 32)
+			fileInfo.FirstFilePartSize = int(firstFilePartSize)
 		case "file_part_size":
-			filePartSize, _ := strconv.Atoi(v)
-			fileInfo.FilePartSize = filePartSize
+			filePartSize, _ := strconv.ParseInt(v, 10, 32)
+			fileInfo.FilePartSize = int(filePartSize)
 		case "last_file_part_size":
-			lastFilePartSize, _ := strconv.Atoi(v)
-			fileInfo.LastFilePartSize = lastFilePartSize
+			lastFilePartSize, _ := strconv.ParseInt(v, 10, 32)
+			fileInfo.LastFilePartSize = int(lastFilePartSize)
 		case "mtime":
 			fileInfo.Mtime, _ = strconv.ParseInt(v, 10, 64)
 		}
