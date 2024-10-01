@@ -167,7 +167,12 @@ func (c *DfsCore) DfsUploadThemeFile(in *dfs.TLDfsUploadThemeFile) (*mtproto.Doc
 		Date:          int32(time.Now().Unix()),
 		MimeType:      in.GetMimeType(),
 		Size2:         fileInfo.GetFileSize(),
-		Size2_INT32:   int32(fileInfo.GetFileSize()),
+		Size2_INT32:   func(size int64) int32 {
+			if size > math.MaxInt32 {
+				return math.MaxInt32
+			}
+			return int32(size)
+		}(fileInfo.GetFileSize()),
 		Size2_INT64:   fileInfo.GetFileSize(),
 		Thumbs:        thumbSizeList,
 		VideoThumbs:   nil,
