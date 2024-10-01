@@ -2,7 +2,7 @@
  * WARNING! All changes made in this file will be lost!
  * Created from 'scheme.tl' by 'mtprotoc'
  *
- * Copyright (c) 2021-present,  Teamgram Studio (https://teamgram.io).
+Copyright (c) 2021-present,  Teamgram Studio (https://teamgram.io).
  *  All rights reserved.
  *
  * Author: teamgramio (teamgram.io@gmail.com)
@@ -13,6 +13,7 @@ package idgen_client
 import (
 	"context"
 	"strconv"
+	"math"
 
 	"github.com/teamgram/proto/mtproto"
 	"github.com/teamgram/teamgram-server/app/service/idgen/idgen"
@@ -204,7 +205,13 @@ func (m *IDGenClient2) NextChannelNPtsId(ctx context.Context, key int64, n int) 
 }
 
 func (m *IDGenClient2) CurrentChannelPtsId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getCurrentSeqId(ctx, channelPtsUpdatesNgenId+strconv.FormatInt(key, 10)))
+	seq64 := m.getCurrentSeqId(ctx, channelPtsUpdatesNgenId+strconv.FormatInt(key, 10))
+	if seq64 > math.MaxInt32 || seq64 < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("idgen.getCurrentSeqId - value out of int32 range: %d", seq64)
+		seq = 0 // or handle the error as appropriate
+	} else {
+		seq = int32(seq64)
+	}
 	return
 }
 
