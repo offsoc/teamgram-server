@@ -23,6 +23,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 
 	"github.com/teamgram/marmota/pkg/stores/sqlc"
@@ -70,8 +71,12 @@ func (d *Dao) getAuthKey(ctx context.Context, keyId int64) (keyData *mtproto.Aut
 	for k, v := range values {
 		switch k {
 		case "auth_key_type":
-			authKeyType, _ := strconv.Atoi(v)
-			keyData.AuthKeyType = int32(authKeyType)
+			parsed, err := strconv.ParseInt(v, 10, 32)
+			if err != nil || parsed < math.MinInt32 || parsed > math.MaxInt32 {
+				logx.WithContext(ctx).Errorf("Invalid auth_key_type value: %v", v)
+				return nil, fmt.Errorf("invalid auth_key_type value: %v", v)
+			}
+			keyData.AuthKeyType = int32(parsed)
 		case "auth_key_id":
 			keyData.AuthKeyId, _ = strconv.ParseInt(v, 10, 64)
 		case "auth_key":
