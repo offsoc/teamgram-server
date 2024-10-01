@@ -23,6 +23,7 @@ import (
 	"crypto/md5"
 	"encoding/binary"
 	"io"
+	"math"
 	"strconv"
 )
 
@@ -49,8 +50,14 @@ func (m *QRCodeTransaction) Token() []byte {
 	token := make([]byte, 8, 24)
 	binary.BigEndian.PutUint64(token, uint64(m.PermAuthKeyId))
 	m2 := md5.New()
+	if m.AuthKeyId > math.MaxInt32 || m.AuthKeyId < math.MinInt32 {
+		panic("AuthKeyId out of int32 bounds")
+	}
 	io.WriteString(m2, strconv.Itoa(int(m.AuthKeyId)))
 	io.WriteString(m2, m.CodeHash)
+	if m.ExpireAt > math.MaxInt32 || m.ExpireAt < math.MinInt32 {
+		panic("ExpireAt out of int32 bounds")
+	}
 	io.WriteString(m2, strconv.Itoa(int(m.ExpireAt)))
 	return m2.Sum(token)
 }
