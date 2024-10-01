@@ -139,7 +139,12 @@ func (m *IDGenClient2) NextChannelMessageBoxId(ctx context.Context, key int64) (
 }
 
 func (m *IDGenClient2) CurrentChannelMessageBoxId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getCurrentSeqId(ctx, channelMessageBoxNgenId+strconv.FormatInt(key, 10)))
+	id := m.getCurrentSeqId(ctx, channelMessageBoxNgenId+strconv.FormatInt(key, 10))
+	if id > math.MaxInt32 || id < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("idgen.getCurrentSeqId - value out of int32 range: %d", id)
+		return 0 // or handle the error as appropriate
+	}
+	seq = int32(id)
 	return
 }
 
@@ -153,7 +158,12 @@ func (m *IDGenClient2) NextSeqId(ctx context.Context, key int64) (seq int64) {
 }
 
 func (m *IDGenClient2) CurrentSeqId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getCurrentSeqId(ctx, seqUpdatesNgenId+strconv.FormatInt(key, 10)))
+	id := m.getCurrentSeqId(ctx, seqUpdatesNgenId+strconv.FormatInt(key, 10))
+	if id > math.MaxInt32 || id < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("idgen.getCurrentSeqId - value out of int32 range: %d", id)
+		return 0 // or handle the error as appropriate
+	}
+	seq = int32(id)
 	return
 }
 
