@@ -21,6 +21,7 @@ package dao
 import (
 	"context"
 	"fmt"
+	"math"
 	"strconv"
 
 	"github.com/teamgram/teamgram-server/app/bff/qrcode/internal/model"
@@ -63,8 +64,13 @@ func (d *Dao) GetCacheQRLoginCode(ctx context.Context, keyId int64) (code *model
 		case "server_id":
 			code.ServerId = v
 		case "api_id":
-			v, _ := strconv.ParseInt(v, 10, 64)
-			code.ApiId = int32(v)
+			v, _ := strconv.ParseInt(v, 10, 32)
+			if v < math.MinInt32 || v > math.MaxInt32 {
+				logx.WithContext(ctx).Errorf("value out of int32 range: %d", v)
+				code.ApiId = 0 // or handle the error as appropriate
+			} else {
+				code.ApiId = int32(v)
+			}
 		case "api_hash":
 			code.ApiHash = v
 		case "code_hash":
