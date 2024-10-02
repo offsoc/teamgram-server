@@ -80,8 +80,13 @@ func (d *Dao) GetCacheQRLoginCode(ctx context.Context, keyId int64) (code *model
 		case "user_id":
 			code.UserId, _ = strconv.ParseInt(v, 10, 64)
 		case "state":
-			v, _ := strconv.ParseInt(v, 10, 64)
-			code.State = int(v)
+			v, _ := strconv.ParseInt(v, 10, 32)
+			if v < math.MinInt32 || v > math.MaxInt32 {
+				logx.WithContext(ctx).Errorf("value out of int range: %d", v)
+				code.State = 0 // or handle the error as appropriate
+			} else {
+				code.State = int(v)
+			}
 		}
 	}
 
