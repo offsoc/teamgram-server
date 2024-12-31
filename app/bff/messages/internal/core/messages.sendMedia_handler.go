@@ -1,21 +1,3 @@
-// Copyright 2022 Teamgram Authors
-//  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// Author: teamgramio (teamgram.io@gmail.com)
-//
-
 package core
 
 import (
@@ -148,17 +130,21 @@ func (c *MessagesCore) MessagesSendMedia(in *mtproto.TLMessagesSendMedia) (*mtpr
 		return nil, err
 	}
 
-	//outMessage, _ = c.fixMessageEntities(c.MD.UserId, peer, true, outMessage, func() bool {
-	//	hasBot := c.MD.IsBot
-	//	if !hasBot {
-	//		//isBot, _ := c.svcCtx.Dao.UserClient.UserIsBot(c.ctx, &userpb.TLUserIsBot{
-	//		//	Id: peer.PeerId,
-	//		//})
-	//		//hasBot = mtproto.FromBool(isBot)
-	//	}
-	//
-	//	return hasBot
-	//})
+	// Add support for themes
+	if in.Theme != nil {
+		outMessage.Theme = in.Theme
+	}
+
+	// Add support for wallpapers
+	if in.Wallpaper != nil {
+		outMessage.Wallpaper = in.Wallpaper
+	}
+
+	// Add support for reactions
+	if in.Reactions != nil {
+		outMessage.Reactions = in.Reactions
+	}
+
 	rUpdate, err := c.svcCtx.Dao.MsgClient.MsgSendMessageV2(c.ctx, &msgpb.TLMsgSendMessageV2{
 		UserId:    c.MD.UserId,
 		AuthKeyId: c.MD.PermAuthKeyId,
