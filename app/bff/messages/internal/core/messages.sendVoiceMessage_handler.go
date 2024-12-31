@@ -8,12 +8,11 @@ import (
 
 	"github.com/zeromicro/go-zero/core/contextx"
 	"github.com/zeromicro/go-zero/core/threading"
-	"github.com/teamgram/teamgram-server/app/bff/messages/plugin"
 )
 
-// MessagesSendMessage
-// messages.sendMessage#d9d75a4 flags:# no_webpage:flags.1?true silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true peer:InputPeer reply_to_msg_id:flags.0?int message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
-func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*mtproto.Updates, error) {
+// MessagesSendVoiceMessage
+// messages.sendVoiceMessage#d9d75a4 flags:# no_webpage:flags.1?true silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true peer:InputPeer reply_to_msg_id:flags.0?int message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
+func (c *MessagesCore) MessagesSendVoiceMessage(in *mtproto.TLMessagesSendVoiceMessage) (*mtproto.Updates, error) {
 	var (
 		peer = mtproto.FromInputPeer2(c.MD.UserId, in.Peer)
 	)
@@ -33,52 +32,7 @@ func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*
 		c.Logger.Errorf("message empty: %v", err)
 		return nil, err
 	}
-	// TODO(@benqi): calc utf16len(message)
-	//else if len(request.Message) > 4000 {
-	//	err = mtproto.ErrMessageTooLong
-	//	c.Logger.Errorf("messages.sendMessage: %v", err)
-	//	return
-	//}
 
-	// Parse and render Markdown formatting
-	parsedMessage, err := plugin.ParseMarkdown(in.Message)
-	if err != nil {
-		c.Logger.Errorf("failed to parse markdown: %v", err)
-		return nil, err
-	}
-
-	// Parse and render hyperlinks
-	parsedMessage, err = plugin.ParseHyperlinks(parsedMessage)
-	if err != nil {
-		c.Logger.Errorf("failed to parse hyperlinks: %v", err)
-		return nil, err
-	}
-
-	// Parse and render HTML embedding
-	parsedMessage, err = plugin.ParseHTMLEmbedding(parsedMessage)
-	if err != nil {
-		c.Logger.Errorf("failed to parse HTML embedding: %v", err)
-		return nil, err
-	}
-
-	// messages.sendMessage#983f9745 flags:#
-	//no_webpage:flags.1?true
-	//silent:flags.5?true
-	//background:flags.6?true
-	//clear_draft:flags.7?true
-	//noforwards:flags.14?true
-	//update_stickersets_order:flags.15?true
-	//invert_media:flags.16?true
-	//peer:InputPeer
-	//reply_to:flags.0?InputReplyTo
-	//message:string
-	//random_id:long
-	//reply_markup:flags.2?ReplyMarkup
-	//entities:flags.3?Vector<MessageEntity>
-	//schedule_date:flags.10?int
-	//send_as:flags.13?InputPeer
-	//quick_reply_shortcut:flags.17?InputQuickReplyShortcut
-	//effect:flags.18?long = Updates;
 	outMessage := mtproto.MakeTLMessage(&mtproto.Message{
 		Out:                  true,
 		Mentioned:            false,
@@ -99,7 +53,7 @@ func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*
 		ViaBotId:             nil,
 		ReplyTo:              nil,
 		Date:                 int32(time.Now().Unix()),
-		Message:              parsedMessage,
+		Message:              in.Message,
 		Media:                nil,
 		ReplyMarkup:          in.ReplyMarkup,
 		Entities:             in.Entities,
@@ -198,21 +152,6 @@ func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*
 		}
 	}
 
-	// Add support for themes
-	if in.Theme != nil {
-		outMessage.Theme = in.Theme
-	}
-
-	// Add support for wallpapers
-	if in.Wallpaper != nil {
-		outMessage.Wallpaper = in.Wallpaper
-	}
-
-	// Add support for reactions
-	if in.Reactions != nil {
-		outMessage.Reactions = in.Reactions
-	}
-
 	rUpdate, err := c.svcCtx.Dao.MsgClient.MsgSendMessageV2(c.ctx, &msgpb.TLMsgSendMessageV2{
 		UserId:    c.MD.UserId,
 		AuthKeyId: c.MD.PermAuthKeyId,
@@ -230,7 +169,7 @@ func (c *MessagesCore) MessagesSendMessage(in *mtproto.TLMessagesSendMessage) (*
 	})
 
 	if err != nil {
-		c.Logger.Errorf("messages.sendMessage#fa88427a - error: %v", err)
+		c.Logger.Errorf("messages.sendVoiceMessage#fa88427a - error: %v", err)
 		return nil, err
 	}
 
