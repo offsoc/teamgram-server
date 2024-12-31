@@ -1,19 +1,18 @@
 package core
 
 import (
+	"context"
+	"errors"
 	"time"
 
 	"github.com/teamgram/proto/mtproto"
-	msgpb "github.com/teamgram/teamgram-server/app/messenger/msg/msg/msg"
-
-	"github.com/zeromicro/go-zero/core/contextx"
-	"github.com/zeromicro/go-zero/core/threading"
 	"github.com/teamgram/teamgram-server/app/bff/messages/plugin"
+	"github.com/teamgram/teamgram-server/app/service/media/media"
 )
 
-// MessagesSendMedia
-// messages.sendMedia#e25ff8e0 flags:# silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true peer:InputPeer reply_to_msg_id:flags.0?int media:InputMedia message:string random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
-func (c *MessagesCore) MessagesSendMedia(in *mtproto.TLMessagesSendMedia) (*mtproto.Updates, error) {
+// MessagesSendFile
+// messages.sendFile#d9d75a4 flags:# no_webpage:flags.1?true silent:flags.5?true background:flags.6?true clear_draft:flags.7?true noforwards:flags.14?true peer:InputPeer reply_to_msg_id:flags.0?int file:InputFile random_id:long reply_markup:flags.2?ReplyMarkup entities:flags.3?Vector<MessageEntity> schedule_date:flags.10?int send_as:flags.13?InputPeer = Updates;
+func (c *MessagesCore) MessagesSendFile(ctx context.Context, in *mtproto.TLMessagesSendFile) (*mtproto.Updates, error) {
 	var (
 		peer       *mtproto.PeerUtil
 		linkChatId int64
@@ -40,9 +39,14 @@ func (c *MessagesCore) MessagesSendMedia(in *mtproto.TLMessagesSendMedia) (*mtpr
 		return nil, err
 	}
 
-	if len(in.Message) > 4000 {
-		err = mtproto.ErrMediaCaptionTooLong
-		c.Logger.Errorf("messages.sendMedia: %v", err)
+	// Enforce file upload limits
+	if in.File.Size > 2*1024*1024*1024 && !c.MD.IsPremium {
+		err = errors.New("file size exceeds 2GB limit for regular users")
+		c.Logger.Errorf("file size exceeds 2GB limit for regular users: %v", err)
+		return nil, err
+	} else if in.File.Size > 4*1024*1024*1024 {
+		err = errors.New("file size exceeds 4GB limit for premium users")
+		c.Logger.Errorf("file size exceeds 4GB limit for premium users: %v", err)
 		return nil, err
 	}
 
@@ -146,35 +150,28 @@ func (c *MessagesCore) MessagesSendMedia(in *mtproto.TLMessagesSendMedia) (*mtpr
 		}).To_MessageReplies()
 	}
 
-	outMessage.Media, err = c.makeMediaByInputMedia(in.Media)
+	// Handle file transfer
+	fileMedia, err := c.svcCtx.MediaClient.MediaUploadFile(ctx, &media.TLMediaUploadFile{
+		OwnerId: c.MD.UserId,
+		File:    in.File,
+	})
 	if err != nil {
-		c.Logger.Errorf("messages.sendMedia - error: %v", err)
+		c.Logger.Errorf("failed to upload file: %v", err)
 		return nil, err
 	}
 
-	// Add support for themes
-	if in.Theme != nil {
-		outMessage.Theme = in.Theme
-	}
+	outMessage.Media = mtproto.MakeTLMessageMediaDocument(&mtproto.MessageMedia{
+		Document: fileMedia,
+	}).To_MessageMedia()
 
-	// Add support for wallpapers
-	if in.Wallpaper != nil {
-		outMessage.Wallpaper = in.Wallpaper
-	}
-
-	// Add support for reactions
-	if in.Reactions != nil {
-		outMessage.Reactions = in.Reactions
-	}
-
-	rUpdate, err := c.svcCtx.Dao.MsgClient.MsgSendMessageV2(c.ctx, &msgpb.TLMsgSendMessageV2{
+	rUpdate, err := c.svcCtx.Dao.MsgClient.MsgSendMessageV2(ctx, &msgpb.TLMsgSendMessageV2{
 		UserId:    c.MD.UserId,
 		AuthKeyId: c.MD.PermAuthKeyId,
 		PeerType:  peer.PeerType,
 		PeerId:    peer.PeerId,
 		Message: []*msgpb.OutboxMessage{
 			msgpb.MakeTLOutboxMessage(&msgpb.OutboxMessage{
-				NoWebpage:    true,
+				NoWebpage:    in.NoWebpage,
 				Background:   in.Background,
 				RandomId:     in.RandomId,
 				Message:      outMessage,
@@ -184,12 +181,12 @@ func (c *MessagesCore) MessagesSendMedia(in *mtproto.TLMessagesSendMedia) (*mtpr
 	})
 
 	if err != nil {
-		c.Logger.Errorf("messages.sendMedia#c8f16791 - error: %v", err)
+		c.Logger.Errorf("messages.sendFile#d9d75a4 - error: %v", err)
 		return nil, err
 	}
 
 	if in.ClearDraft {
-		ctx := contextx.ValueOnlyFrom(c.ctx)
+		ctx := contextx.ValueOnlyFrom(ctx)
 		threading.GoSafe(func() {
 			c.doClearDraft(ctx, c.MD.UserId, c.MD.PermAuthKeyId, peer)
 		})
