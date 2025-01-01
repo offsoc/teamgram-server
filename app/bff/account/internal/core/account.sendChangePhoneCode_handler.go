@@ -1,21 +1,3 @@
-// Copyright 2022 Teamgram Authors
-//  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// Author: teamgramio (teamgram.io@gmail.com)
-//
-
 package core
 
 import (
@@ -25,6 +7,7 @@ import (
 	"github.com/teamgram/teamgram-server/app/bff/authorization/model"
 	userpb "github.com/teamgram/teamgram-server/app/service/biz/user/user"
 	"github.com/teamgram/teamgram-server/pkg/phonenumber"
+	"github.com/teamgram/teamgram-server/app/bff/encryption/internal/core/encryption"
 
 	"google.golang.org/grpc/status"
 )
@@ -99,54 +82,11 @@ func (c *AccountCore) AccountSendChangePhoneCode(in *mtproto.TLAccountSendChange
 		return nil, mtproto.ErrPhoneNumberOccupied
 	}
 
-	//sentCodeType, nextCodeType := code.MakeCodeType(
-	//	false,
-	//	in.GetSettings().GetAllowFlashcall(),
-	//	in.GetSettings().GetCurrentNumber())
-	//
-	//var (
-	//	codeData *code.PhoneCodeTransaction
-	//)
-	//
-	//codeData, err = c.svcCtx.Dao.CodeClient.CodeCreatePhoneCode(c.ctx, &code.TLCodeCreatePhoneCode{
-	//	AuthKeyId:             c.MD.PermAuthKeyId,
-	//	SessionId:             c.MD.SessionId,
-	//	Phone:                 phoneNumber,
-	//	PhoneNumberRegistered: false,
-	//	SentCodeType:          int32(sentCodeType),
-	//	NextCodeType:          int32(nextCodeType),
-	//	State:                 code.CodeStateReSent,
-	//})
-	//if err != nil {
-	//	c.Logger.Errorf("account.sendChangePhoneCode error: %v", err)
-	//	return nil, err
-	//}
-	//
-	//if codeData.State == model.CodeStateSent {
-	//	c.Logger.Debugf("codeSent")
-	//	// return nil
-	//}
-	//
-	//c.Logger.Debugf("send code by sms")
-	//if extraData, err := s.VerifyCodeInterface.SendSmsVerifyCode(
-	//	context.Background(),
-	//	phoneNumber,
-	//	codeData.PhoneCode,
-	//	codeData.PhoneCodeHash); err != nil {
-	//	return nil, err
-	//} else {
-	//	codeData.SentCodeType = model.CodeTypeSms
-	//	codeData.PhoneCodeExtraData = extraData
-	//}
-	//
-	//codeData.NextCodeType = model.CodeTypeSms
-	//codeData.State = model.CodeStateSent
-
 	codeData, err2 := c.svcCtx.AuthLogic.DoAuthSendCode(
 		c.ctx,
 		c.MD.PermAuthKeyId,
 		c.MD.SessionId,
-		phoneNumber,
+			phoneNumber,
 		in.Settings.AllowFlashcall,
 		in.Settings.CurrentNumber,
 		func(codeData2 *model.PhoneCodeTransaction) error {
@@ -170,53 +110,8 @@ func (c *AccountCore) AccountSendChangePhoneCode(in *mtproto.TLAccountSendChange
 				codeData2.PhoneCodeExtraData = extraData
 			}
 
-			//if user.User.UserType == userpb.UserTypeTest {
-			//	c.Logger.Infof("test user: %s, %s", phoneNumber, user)
-			//	codeData2.SentCodeType = model.CodeTypeApp
-			//	codeData2.PhoneCode = "12345"
-			//	codeData2.PhoneCodeExtraData = "12345"
-			//	go func() {
-			//		// c.pushSignInMessage(context.Background(), user.Id, codeData2.PhoneCode)
-			//	}()
-			//} else {
-			//	var (
-			//		online = false
-			//	)
-			//
-			//	if phoneRegistered {
-			//		if status, _ := c.svcCtx.StatusClient.StatusGetUserOnlineSessions(c.ctx, &status.TLStatusGetUserOnlineSessions{
-			//			UserId: user.User.Id,
-			//		}); len(status.GetUserSessions()) > 0 {
-			//			c.Logger.Infof("user online")
-			//			online = true
-			//
-			//			codeData2.SentCodeType = model.CodeTypeApp
-			//			codeData2.PhoneCodeExtraData = codeData2.PhoneCode
-			//			go func() {
-			//				// s.pushSignInMessage(context.Background(), user.Id, codeData2.PhoneCode)
-			//			}()
-			//		}
-			//		// &&
-			//	}
-			//
-			//	if !phoneRegistered || !online {
-			//		c.Logger.Infof("send code by sms")
-			//		if extraData, err := c.svcCtx.AuthLogic.VerifyCodeInterface.SendSmsVerifyCode(
-			//			context.Background(),
-			//			phoneNumber,
-			//			codeData2.PhoneCode,
-			//			codeData2.PhoneCodeHash); err != nil {
-			//			return err
-			//		} else {
-			//			codeData2.SentCodeType = model.CodeTypeSms
-			//			codeData2.PhoneCodeExtraData = extraData
-			//		}
-			//	}
-			//}
-
 			codeData2.NextCodeType = model.CodeTypeSms
 			codeData2.State = model.CodeStateSent
-			// codeData2.PhoneNumberRegistered = phoneRegistered
 
 			return nil
 		})
@@ -225,6 +120,14 @@ func (c *AccountCore) AccountSendChangePhoneCode(in *mtproto.TLAccountSendChange
 		c.Logger.Errorf("auth.sendCode - error: %v", err2)
 		return nil, err2
 	}
+
+	// Encrypt the phone code before sending it
+	encryptedPhoneCode, err := encryption.EncryptMessage(codeData.PhoneCode, "encryption_key")
+	if err != nil {
+		c.Logger.Errorf("account.sendChangePhoneCode - encryption error: %v", err)
+		return nil, err
+	}
+	codeData.PhoneCode = encryptedPhoneCode
 
 	return codeData.ToAuthSentCode(), nil
 }
