@@ -8,6 +8,7 @@ import (
 
 	"github.com/zeromicro/go-zero/core/contextx"
 	"github.com/zeromicro/go-zero/core/threading"
+	"github.com/teamgram/teamgram-server/app/bff/messages/plugin"
 )
 
 // MessagesSendMultiMedia
@@ -84,6 +85,27 @@ func (c *MessagesCore) MessagesSendMultiMedia(in *mtproto.TLMessagesSendMultiMed
 			return nil, err
 		}
 
+		// Parse and render Markdown formatting
+		parsedMessage, err := plugin.ParseMarkdown(media.Message)
+		if err != nil {
+			c.Logger.Errorf("failed to parse markdown: %v", err)
+			return nil, err
+		}
+
+		// Parse and render hyperlinks
+		parsedMessage, err = plugin.ParseHyperlinks(parsedMessage)
+		if err != nil {
+			c.Logger.Errorf("failed to parse hyperlinks: %v", err)
+			return nil, err
+		}
+
+		// Parse and render HTML embedding
+		parsedMessage, err = plugin.ParseHTMLEmbedding(parsedMessage)
+		if err != nil {
+			c.Logger.Errorf("failed to parse HTML embedding: %v", err)
+			return nil, err
+		}
+
 		outMessage := mtproto.MakeTLMessage(&mtproto.Message{
 			Out:                  true,
 			Mentioned:            false,
@@ -104,7 +126,7 @@ func (c *MessagesCore) MessagesSendMultiMedia(in *mtproto.TLMessagesSendMultiMed
 			ViaBotId:             nil,
 			ReplyTo:              nil,
 			Date:                 int32(time.Now().Unix()),
-			Message:              media.Message,
+			Message:              parsedMessage,
 			Media:                nil,
 			ReplyMarkup:          nil, // request.ReplyMarkup,
 			Entities:             media.Entities,
