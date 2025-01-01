@@ -1,21 +1,3 @@
-// Copyright 2022 Teamgram Authors
-//  All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// Author: teamgramio (teamgram.io@gmail.com)
-//
-
 package logic
 
 import (
@@ -26,6 +8,7 @@ import (
 	"github.com/teamgram/teamgram-server/app/bff/account/internal/dao"
 	"github.com/teamgram/teamgram-server/app/bff/authorization/model"
 	"github.com/teamgram/teamgram-server/pkg/code"
+	"github.com/teamgram/teamgram-server/app/bff/encryption/internal/core/encryption"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -110,7 +93,7 @@ func (m *AuthLogic) DoAuthReSendCode(ctx context.Context,
 	//// TODO(@benqi): attempts
 	//if do.Attempts > 3 {
 	//	// TODO(@benqi): 输入了太多次错
-	//
+	//	//
 	// 误的phone code
 	//	err := mtproto.NewFloodWaitX(15*60, "too many attempts.")
 	//	return err
@@ -292,4 +275,14 @@ func (m *AuthLogic) DoAuthSignUp(ctx context.Context, authKeyId int64, phoneNumb
 		m.PhoneCodeTransaction = codeData
 	*/
 	return
+}
+
+// Encrypt the phone number before changing it
+func (m *AuthLogic) EncryptPhoneNumber(phoneNumber string) (string, error) {
+	return encryption.EncryptMessage(phoneNumber, "encryption_key")
+}
+
+// Decrypt the phone number before changing it
+func (m *AuthLogic) DecryptPhoneNumber(encryptedPhoneNumber string) (string, error) {
+	return encryption.DecryptMessage(encryptedPhoneNumber, "encryption_key")
 }

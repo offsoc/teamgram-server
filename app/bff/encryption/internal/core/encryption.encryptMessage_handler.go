@@ -92,3 +92,63 @@ func EncryptSecretChatMessage(message, key string) (string, error) {
 func DecryptSecretChatMessage(encryptedMessage, key string) (string, error) {
     return DecryptMessage(encryptedMessage, key)
 }
+
+// EncryptVoiceCall encrypts the given voice call data using AES encryption.
+func EncryptVoiceCall(voiceCallData, key string) (string, error) {
+    return EncryptMessage(voiceCallData, key)
+}
+
+// DecryptVoiceCall decrypts the given encrypted voice call data using AES encryption.
+func DecryptVoiceCall(encryptedVoiceCallData, key string) (string, error) {
+    return DecryptMessage(encryptedVoiceCallData, key)
+}
+
+// EncryptVideoCall encrypts the given video call data using AES encryption.
+func EncryptVideoCall(videoCallData, key string) (string, error) {
+    return EncryptMessage(videoCallData, key)
+}
+
+// DecryptVideoCall decrypts the given encrypted video call data using AES encryption.
+func DecryptVideoCall(encryptedVideoCallData, key string) (string, error) {
+    return DecryptMessage(encryptedVideoCallData, key)
+}
+
+// EncryptGroupCall encrypts the given group call data using AES encryption.
+func EncryptGroupCall(groupCallData, key string) (string, error) {
+    return EncryptMessage(groupCallData, key)
+}
+
+// DecryptGroupCall decrypts the given encrypted group call data using AES encryption.
+func DecryptGroupCall(encryptedGroupCallData, key string) (string, error) {
+    return DecryptMessage(encryptedGroupCallData, key)
+}
+
+// EncryptChannelCall encrypts the given channel call data using AES encryption.
+func EncryptChannelCall(channelCallData, key string) (string, error) {
+    return EncryptMessage(channelCallData, key)
+}
+
+// DecryptChannelCall decrypts the given encrypted channel call data using AES encryption.
+func DecryptChannelCall(encryptedChannelCallData, key string) (string, error) {
+    return DecryptMessage(encryptedChannelCallData, key)
+}
+
+// EncryptScreenSharing encrypts the given screen sharing data using AES encryption.
+func EncryptScreenSharing(screenSharingData, key string) (string, error) {
+    return EncryptMessage(screenSharingData, key)
+}
+
+// DecryptScreenSharing decrypts the given encrypted screen sharing data using AES encryption.
+func DecryptScreenSharing(encryptedScreenSharingData, key string) (string, error) {
+    return DecryptMessage(encryptedScreenSharingData, key)
+}
+
+// EncryptRealTimeTranslation encrypts the given real-time translation data using AES encryption.
+func EncryptRealTimeTranslation(realTimeTranslationData, key string) (string, error) {
+    return EncryptMessage(realTimeTranslationData, key)
+}
+
+// DecryptRealTimeTranslation decrypts the given encrypted real-time translation data using AES encryption.
+func DecryptRealTimeTranslation(encryptedRealTimeTranslationData, key string) (string, error) {
+    return DecryptMessage(encryptedRealTimeTranslationData, key)
+}
