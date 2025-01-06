@@ -13,6 +13,7 @@ package idgen_client
 import (
 	"context"
 	"strconv"
+	"math"
 
 	"github.com/teamgram/proto/mtproto"
 	"github.com/teamgram/teamgram-server/app/service/idgen/idgen"
@@ -180,12 +181,22 @@ func (m *IDGenClient2) SetCurrentPtsId(ctx context.Context, key int64, v int32) 
 }
 
 func (m *IDGenClient2) NextQtsId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getNextSeqId(ctx, qtsUpdatesNgenId+strconv.FormatInt(key, 10)))
+	seq64 := m.getNextSeqId(ctx, qtsUpdatesNgenId+strconv.FormatInt(key, 10))
+	if seq64 > math.MaxInt32 || seq64 < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("NextQtsId - value out of int32 range: %d", seq64)
+		return 0 // or handle the error appropriately
+	}
+	seq = int32(seq64)
 	return
 }
 
 func (m *IDGenClient2) CurrentQtsId(ctx context.Context, key int64) (seq int32) {
-	seq = int32(m.getCurrentSeqId(ctx, qtsUpdatesNgenId+strconv.FormatInt(key, 10)))
+	seq64 := m.getCurrentSeqId(ctx, qtsUpdatesNgenId+strconv.FormatInt(key, 10))
+	if seq64 > math.MaxInt32 || seq64 < math.MinInt32 {
+		logx.WithContext(ctx).Errorf("CurrentQtsId - value out of int32 range: %d", seq64)
+		return 0 // or handle the error appropriately
+	}
+	seq = int32(seq64)
 	return
 }
 
