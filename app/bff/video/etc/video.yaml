@@ -1,0 +1,363 @@
+# Teamgram Video BFF Service Configuration
+# 8K Ultra-High Definition Video Calling Service
+
+Name: teamgram-video-bff
+Host: 0.0.0.0
+Port: 8055
+Mode: dev
+
+# Video Service Configuration
+Video:
+  # Basic Settings
+  Enabled: true
+  MaxConcurrentCalls: 10000
+  MaxParticipants: 200000
+  CallTimeout: 24h
+
+  # Video Quality Settings
+  MaxResolution: "8K"
+  MaxFrameRate: 60
+  MaxBitrate: 100000000  # 100 Mbps for 8K
+  AdaptiveBitrate: true
+
+  # Performance Settings
+  EnableGPU: true
+  EnableHardwareCodec: true
+  MaxCPUUsage: 80.0
+  MaxMemoryUsage: 8589934592  # 8GB
+
+  # Network Settings
+  EnableP2P: true
+  EnableRelay: true
+  STUNServers:
+    - "stun:stun.l.google.com:19302"
+    - "stun:stun1.l.google.com:19302"
+  TURNServers:
+    - "turn:turn.teamgram.io:3478"
+
+  # Quality Settings
+  TargetLatency: 30ms
+  MaxLatency: 50ms
+  EnableJitterBuffer: true
+  EnableFEC: true
+
+  # Security Settings
+  EnableDTLS: true
+  EnableSRTP: true
+  EnableAuth: true
+
+  # Monitoring
+  EnableMetrics: true
+  MetricsPort: 9055
+  MetricsInterval: 30s
+  HealthCheckInterval: 30s
+
+  # Codec Configuration
+  CodecConfig:
+    # AV1 Settings (Primary for 8K)
+    EnableAV1: true
+    AV1Profile: "main"
+    AV1Level: "6.3"
+    AV1Preset: "fast"
+    AV1CRF: 23
+
+    # H.266/VVC Settings (Next-gen efficiency)
+    EnableH266: true
+    H266Profile: "main10"
+    H266Level: "6.3"
+    H266Tier: "high"
+    H266Preset: "fast"
+    H266QP: 22
+
+    # H.264 Settings (Compatibility)
+    EnableH264: true
+    H264Profile: "high"
+    H264Level: "5.2"
+    H264Preset: "fast"
+    H264CRF: 23
+
+    # VP9 Settings (Fallback)
+    EnableVP9: true
+    VP9Profile: "0"
+    VP9CRF: 30
+
+    # Encoding Settings
+    KeyFrameInterval: 60
+    BFrames: 3
+    ThreadCount: 8
+    EnableHardwareAccel: true
+
+    # Real-time Settings
+    EnableRealtime: true
+    RealtimeDeadline: 16ms  # 60fps
+    LowLatencyMode: true
+
+  # SFU Configuration
+  SFUConfig:
+    # Cluster Settings
+    EnableClustering: true
+    ClusterNodes:
+      - "sfu1.teamgram.io:8056"
+      - "sfu2.teamgram.io:8056"
+      - "sfu3.teamgram.io:8056"
+    LoadBalanceStrategy: "least_loaded"
+    NodeID: "sfu-node-1"
+
+    # Forwarding Settings
+    MaxForwardStreams: 1000
+    EnableSimulcast: true
+    EnableSVC: true
+    ForwardingStrategy: "adaptive"
+
+    # Bandwidth Management
+    EnableBWE: true
+    InitialBandwidth: 1000000    # 1 Mbps
+    MaxBandwidth: 100000000      # 100 Mbps
+    MinBandwidth: 100000         # 100 Kbps
+    BWEAlgorithm: "gcc"
+
+    # Quality Adaptation
+    EnableQualityAdapt: true
+    AdaptationInterval: 5s
+    QualityLevels:
+      - Name: "8K"
+        Width: 7680
+        Height: 4320
+        FrameRate: 60
+        Bitrate: 100000000
+        ScalabilityMode: "L3T3"
+      - Name: "4K"
+        Width: 3840
+        Height: 2160
+        FrameRate: 60
+        Bitrate: 25000000
+        ScalabilityMode: "L3T3"
+      - Name: "1080p"
+        Width: 1920
+        Height: 1080
+        FrameRate: 60
+        Bitrate: 8000000
+        ScalabilityMode: "L3T3"
+      - Name: "720p"
+        Width: 1280
+        Height: 720
+        FrameRate: 30
+        Bitrate: 3000000
+        ScalabilityMode: "L2T2"
+
+    # Performance Settings
+    MaxConcurrentRooms: 10000
+    MaxParticipantsPerRoom: 200000
+    EnableGPUAccel: true
+    ProcessingThreads: 8
+
+    # Network Settings
+    UDPPortRange:
+      Min: 10000
+      Max: 20000
+    TCPPortRange:
+      Min: 20000
+      Max: 30000
+    EnableIPv6: true
+
+    # Security Settings
+    EnableAuth: true
+    AuthToken: "sfu-secret-token"
+    EnableEncryption: true
+
+  # AI Enhancement Configuration
+  AIEnhanceConfig:
+    # Basic Settings
+    Enabled: true
+    EnableRealtime: true
+    MaxConcurrentJobs: 8
+    ProcessingTimeout: 5s
+
+    # Enhancement Features
+    EnableUpscaling: true
+    EnableDenoising: true
+    EnableSharpening: true
+    EnableColorCorrect: true
+    EnableLowLight: true
+    EnableFaceEnhance: true
+    EnableBackground: true
+    EnableStabilization: true
+
+    # AI Models
+    UpscalingModel: "esrgan"
+    DenoisingModel: "dncnn"
+    FaceEnhanceModel: "gfpgan"
+    BackgroundModel: "u2net"
+    StabilizationModel: "difrint"
+
+    # Performance Settings
+    EnableGPU: true
+    GPUMemoryLimit: 4294967296  # 4GB
+    CPUThreads: 8
+    BatchSize: 4
+
+    # Quality Settings
+    UpscalingFactor: 2.0
+    DenoisingStrength: 0.5
+    SharpeningStrength: 0.3
+    ColorCorrectionLevel: 0.7
+
+    # Real-time Settings
+    FrameBufferSize: 10
+    ProcessingLatency: 16ms  # ~60fps
+    EnableFrameSkip: true
+    SkipThreshold: 33ms      # 30fps threshold
+
+  # WebRTC Configuration
+  WebRTCConfig:
+    # ICE Settings
+    ICEServers:
+      - URLs:
+          - "stun:stun.l.google.com:19302"
+          - "stun:stun1.l.google.com:19302"
+      - URLs:
+          - "turn:turn.teamgram.io:3478"
+        Username: "teamgram"
+        Credential: "turn-secret"
+        Type: "turn"
+    ICETransportPolicy: "all"
+    ICECandidatePoolSize: 10
+    ICEGatheringTimeout: 10s
+
+    # Media Settings
+    EnableAudio: true
+    EnableVideo: true
+    EnableDataChannel: true
+
+    # Video Settings
+    VideoCodecs:
+      - Name: "AV1"
+        PayloadType: 96
+        ClockRate: 90000
+        Parameters:
+          profile-id: "0"
+      - Name: "H266"
+        PayloadType: 97
+        ClockRate: 90000
+        Parameters:
+          profile-id: "1"
+      - Name: "H264"
+        PayloadType: 98
+        ClockRate: 90000
+        Parameters:
+          profile-level-id: "42e01f"
+      - Name: "VP9"
+        PayloadType: 99
+        ClockRate: 90000
+        Parameters:
+          profile-id: "0"
+
+    AudioCodecs:
+      - Name: "OPUS"
+        PayloadType: 111
+        ClockRate: 48000
+        Channels: 2
+        Parameters:
+          minptime: "10"
+          useinbandfec: "1"
+      - Name: "G722"
+        PayloadType: 9
+        ClockRate: 8000
+        Channels: 1
+
+    MaxVideoBitrate: 100000000  # 100 Mbps
+    MaxAudioBitrate: 320000     # 320 kbps
+
+    # Security Settings
+    EnableDTLS: true
+    EnableSRTP: true
+    DTLSCertificate: "/etc/ssl/certs/teamgram-video.crt"
+    DTLSPrivateKey: "/etc/ssl/private/teamgram-video.key"
+
+    # Performance Settings
+    MaxBandwidth: 100000000     # 100 Mbps
+    MinBandwidth: 1000000       # 1 Mbps
+    StartBandwidth: 10000000    # 10 Mbps
+    EnableBWE: true
+
+    # Network Settings
+    EnableIPv6: true
+    EnableTCP: true
+    EnableUDP: true
+    PortRange:
+      Min: 10000
+      Max: 20000
+
+    # Signaling Settings
+    SignalingPort: 8080
+    EnableWebSocket: true
+    EnableHTTP: true
+
+    # Quality Settings
+    EnableJitterBuffer: true
+    EnableFEC: true
+    EnableNACK: true
+    EnablePLI: true
+
+    # Advanced Settings
+    EnableSimulcast: true
+    EnableSVC: true
+    EnableRED: true
+    EnableULPFEC: true
+
+# Logging Configuration
+Log:
+  ServiceName: teamgram-video-bff
+  Mode: console
+  Level: info
+  Encoding: json
+  TimeFormat: "2006-01-02 15:04:05"
+
+# Telemetry Configuration
+Telemetry:
+  Name: teamgram-video-bff
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+# Prometheus Metrics
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9055
+  Path: /metrics
+
+# Health Check
+Health:
+  Enabled: true
+  Port: 9056
+  Path: /health
+
+# Rate Limiting
+RateLimit:
+  Enabled: true
+  Requests: 1000
+  Duration: 1m
+
+# Circuit Breaker
+CircuitBreaker:
+  Enabled: true
+  Threshold: 5
+  Timeout: 30s
+
+# Cache Configuration
+Cache:
+  Enabled: true
+  Type: redis
+  Redis:
+    Host: redis:6379
+    Password: ""
+    DB: 0
+    PoolSize: 10
+
+# Database Configuration (for call records)
+Database:
+  Driver: postgres
+  Source: "postgres://teamgram:password@postgres:5432/teamgram_video?sslmode=disable"
+  MaxOpenConns: 100
+  MaxIdleConns: 10
+  ConnMaxLifetime: 1h

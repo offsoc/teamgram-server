@@ -20,7 +20,10 @@ import (
 // AccountSetContentSettings
 // account.setContentSettings#b574b16b flags:# sensitive_enabled:flags.0?true = Bool;
 func (s *Service) AccountSetContentSettings(ctx context.Context, request *mtproto.TLAccountSetContentSettings) (*mtproto.Bool, error) {
-	c := core.New(ctx, s.svcCtx)
+	c, err := core.New(ctx, s.svcCtx)
+	if err != nil {
+		return nil, err
+	}
 	c.Logger.Debugf("account.setContentSettings - metadata: {%s}, request: {%s}", c.MD, request)
 
 	r, err := c.AccountSetContentSettings(request)
@@ -35,7 +38,10 @@ func (s *Service) AccountSetContentSettings(ctx context.Context, request *mtprot
 // AccountGetContentSettings
 // account.getContentSettings#8b9b4dae = account.ContentSettings;
 func (s *Service) AccountGetContentSettings(ctx context.Context, request *mtproto.TLAccountGetContentSettings) (*mtproto.Account_ContentSettings, error) {
-	c := core.New(ctx, s.svcCtx)
+	c, err := core.New(ctx, s.svcCtx)
+	if err != nil {
+		return nil, err
+	}
 	c.Logger.Debugf("account.getContentSettings - metadata: {%s}, request: {%s}", c.MD, request)
 
 	r, err := c.AccountGetContentSettings(request)

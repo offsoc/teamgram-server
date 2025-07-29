@@ -1,0 +1,278 @@
+# Teamgram Blockchain Service Configuration
+
+Name: teamgram.blockchain
+ListenOn: 0.0.0.0:8082
+Mode: dev
+MetricsUrl: http://127.0.0.1:9093/metrics
+Prometheus:
+  Host: 127.0.0.1
+  Port: 9093
+  Path: /metrics
+
+# Blockchain Service Configuration
+Blockchain:
+  # Basic settings
+  Enabled: true
+  MaxConcurrentRequests: 100
+  RequestTimeout: 30s
+  
+  # Security settings
+  SecurityLevel: "banking"
+  EnableMFA: true
+  RequireHardware: false
+  
+  # Performance settings
+  EnableCaching: true
+  CacheSize: 1000
+  CacheTTL: 1h
+  
+  # Rate limiting
+  EnableRateLimit: true
+  RequestsPerSecond: 10
+  BurstSize: 20
+  
+  # Monitoring
+  EnableMetrics: true
+  MetricsPort: 9054
+  HealthCheckInterval: 30s
+  
+  # Wallet Configuration
+  WalletConfig:
+    # HD Wallet settings
+    EnableHDWallet: true
+    DefaultDerivationPath: "m/44'/0'/0'"
+    MaxAddressGap: 20
+    
+    # Multi-signature settings
+    EnableMultiSig: true
+    DefaultThreshold: 2
+    MaxSigners: 15
+    
+    # Supported currencies (50+ major cryptocurrencies)
+    SupportedCurrencies:
+      # Major cryptocurrencies
+      - "BTC"   # Bitcoin
+      - "ETH"   # Ethereum
+      - "BNB"   # Binance Coin
+      - "ADA"   # Cardano
+      - "SOL"   # Solana
+      - "XRP"   # Ripple
+      - "DOT"   # Polkadot
+      - "DOGE"  # Dogecoin
+      - "AVAX"  # Avalanche
+      - "MATIC" # Polygon
+      - "SHIB"  # Shiba Inu
+      - "LTC"   # Litecoin
+      - "TRX"   # TRON
+      - "UNI"   # Uniswap
+      - "ATOM"  # Cosmos
+      - "LINK"  # Chainlink
+      - "ETC"   # Ethereum Classic
+      - "XLM"   # Stellar
+      - "BCH"   # Bitcoin Cash
+      - "ALGO"  # Algorand
+      - "VET"   # VeChain
+      - "ICP"   # Internet Computer
+      - "FIL"   # Filecoin
+      - "HBAR"  # Hedera
+      - "APE"   # ApeCoin
+      - "NEAR"  # NEAR Protocol
+      - "MANA"  # Decentraland
+      - "SAND"  # The Sandbox
+      - "CRO"   # Cronos
+      - "LDO"   # Lido DAO
+      
+      # Stablecoins
+      - "USDT"  # Tether
+      - "USDC"  # USD Coin
+      - "BUSD"  # Binance USD
+      - "DAI"   # Dai
+      - "TUSD"  # TrueUSD
+      - "USDD"  # USDD
+      - "FRAX"  # Frax
+      - "LUSD"  # Liquity USD
+      
+      # DeFi tokens
+      - "AAVE"  # Aave
+      - "COMP"  # Compound
+      - "MKR"   # Maker
+      - "SNX"   # Synthetix
+      - "SUSHI" # SushiSwap
+      - "1INCH" # 1inch
+      - "CRV"   # Curve DAO
+      - "BAL"   # Balancer
+      - "YFI"   # yearn.finance
+      - "RUNE"  # THORChain
+      
+      # Layer 2 tokens
+      - "ARB"   # Arbitrum
+      - "OP"    # Optimism
+      - "IMX"   # Immutable X
+      - "LRC"   # Loopring
+      
+    # Security settings
+    RequireMFA: true
+    EnableHardware: false
+    KeyDerivationRounds: 100000
+    
+    # Performance settings
+    SyncInterval: 5m
+    CacheSize: 1000
+    CacheTTL: 1h
+  
+  # DeFi Configuration
+  DeFiConfig:
+    # Protocol support
+    EnableUniswap: true
+    EnableSushiSwap: true
+    EnableCompound: true
+    EnableAave: true
+    EnableCurve: false
+    
+    # Risk management
+    MaxSlippage: 0.05          # 5%
+    MaxGasPrice: "100000000000" # 100 gwei
+    MinLiquidity: "1000000000000000000" # 1 ETH
+    
+    # Staking settings
+    EnableStaking: true
+    MinStakeAmount: "100000000000000000" # 0.1 ETH
+    UnstakingPeriod: 168h      # 7 days
+    
+    # Yield farming settings
+    EnableYieldFarming: true
+    MinYieldThreshold: 0.05    # 5% APY
+    AutoCompound: false
+    
+    # Performance settings
+    UpdateInterval: 1m
+    MaxConcurrentOps: 10
+    EnableAutoRebalance: false
+  
+  # NFT Configuration
+  NFTConfig:
+    # Basic settings
+    Enabled: true
+    MaxFileSize: 104857600     # 100MB
+    SupportedFormats:
+      - "jpg"
+      - "jpeg"
+      - "png"
+      - "gif"
+      - "mp4"
+      - "mp3"
+      - "wav"
+      - "webm"
+      - "svg"
+    
+    # Marketplace settings
+    EnableMarketplace: true
+    MarketplaceFee: 0.025      # 2.5%
+    RoyaltyFee: 0.1            # 10%
+    
+    # Minting settings
+    EnableMinting: true
+    MintingFee: "10000000000000000" # 0.01 ETH
+    MaxSupply: 10000
+    
+    # Storage settings
+    StorageProvider: "ipfs"
+    IPFSGateway: "https://ipfs.io/ipfs/"
+    
+    # Performance settings
+    ProcessingTimeout: 60s
+    MaxConcurrentMints: 10
+  
+  # Bridge Configuration
+  BridgeConfig:
+    # Basic settings
+    Enabled: true
+    SupportedChains:
+      - "ethereum"
+      - "polygon"
+      - "bsc"
+      - "bitcoin"
+      - "avalanche"
+      - "arbitrum"
+      - "optimism"
+      - "fantom"
+    
+    # Bridge limits
+    MinBridgeAmount: "1000000000000000000"   # 1 ETH
+    MaxBridgeAmount: "100000000000000000000" # 100 ETH
+    BridgeFee: "10000000000000000"           # 0.01 ETH
+    FeePercentage: 0.001                     # 0.1%
+    
+    # Security settings
+    RequiredValidators: 3
+    ValidatorThreshold: 2
+    SecurityDelay: 5m
+    
+    # Atomic swap settings
+    EnableAtomicSwaps: true
+    SwapTimeout: 24h
+    HTLCTimeout: 2h
+    
+    # Performance settings
+    MaxConcurrentBridges: 100
+    ConfirmationBlocks:
+      ethereum: 12
+      polygon: 20
+      bsc: 15
+      bitcoin: 6
+      avalanche: 10
+      arbitrum: 1
+      optimism: 1
+      fantom: 5
+  
+  # Network Configurations
+  EthereumConfig:
+    Enabled: true
+    NetworkID: 1
+    ChainID: 1
+    RPCURL: "https://mainnet.infura.io/v3/YOUR-PROJECT-ID"
+    WSUrl: "wss://mainnet.infura.io/ws/v3/YOUR-PROJECT-ID"
+    DefaultGasLimit: 21000
+    DefaultGasPrice: "20000000000"  # 20 gwei
+    MaxGasPrice: "100000000000"     # 100 gwei
+    SupportedTokens:
+      USDT: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+      USDC: "0xA0b86a33E6441b8C4505B8C4505B8C4505B8C4505"
+      UNI: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+      LINK: "0x514910771AF9Ca656af840dff83E8264EcF986CA"
+      AAVE: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9"
+  
+  BitcoinConfig:
+    Enabled: true
+    Network: "mainnet"
+    RPCURL: "http://localhost:8332"
+    RPCUser: "bitcoin"
+    RPCPassword: "your-rpc-password"
+    DefaultFeeRate: 10          # sat/byte
+    MinFeeRate: 1
+    MaxFeeRate: 1000
+  
+  PolygonConfig:
+    Enabled: true
+    NetworkID: 137
+    ChainID: 137
+    RPCURL: "https://polygon-rpc.com"
+    DefaultGasLimit: 21000
+    DefaultGasPrice: "30000000000" # 30 gwei
+  
+  BSCConfig:
+    Enabled: true
+    NetworkID: 56
+    ChainID: 56
+    RPCURL: "https://bsc-dataseed.binance.org"
+    DefaultGasLimit: 21000
+    DefaultGasPrice: "5000000000"  # 5 gwei
+
+# Logging configuration
+Log:
+  ServiceName: teamgram-blockchain
+  Mode: console
+  Level: info
+  Compress: false
+  KeepDays: 7
+  StackCooldownMillis: 100

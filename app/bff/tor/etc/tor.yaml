@@ -1,0 +1,106 @@
+# Teamgram Tor Service Configuration
+
+Name: teamgram.tor
+ListenOn: 0.0.0.0:8080
+Mode: dev
+MetricsUrl: http://127.0.0.1:9091/metrics
+Prometheus:
+  Host: 127.0.0.1
+  Port: 9091
+  Path: /metrics
+
+# Tor Service Configuration
+Tor:
+  # Basic settings
+  Enabled: true
+  SocksPort: 9050
+  ControlPort: 9051
+  DataDirectory: /tmp/teamgram-tor
+  LogLevel: notice
+  
+  # Circuit configuration
+  CircuitBuildTimeout: 60s
+  MaxCircuits: 10
+  CircuitIdleTimeout: 10m
+  
+  # Transport configuration
+  EnableObfs4: true
+  EnableMeek: true
+  EnableSnowflake: true
+  EnableScrambleSuit: false
+  
+  # Bridge configuration
+  UseBridges: false
+  BridgeDiscovery: true
+  MaxBridges: 5
+  # BridgeList:
+  #   - "obfs4 192.0.2.3:80 cert=2wmcpvgSYPTdOKXKqzil7QHNZqvGYnLCP1HLcZHOxTgKSdhFUqyGd7VHVHBkc5CtJCJoRTQ iat-mode=0"
+  #   - "meek_lite 192.0.2.4:80 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com"
+  
+  # Onion service configuration
+  EnableOnionService: false
+  OnionServicePort: 8080
+  OnionKeyPath: /tmp/teamgram-tor/onion_key
+  # OnionServiceDirs:
+  #   - /tmp/teamgram-tor/onion1
+  #   - /tmp/teamgram-tor/onion2
+  
+  # Performance configuration
+  MaxStreamsPerCircuit: 10
+  ConnectionTimeout: 30s
+  RequestTimeout: 60s
+  
+  # Security configuration
+  StrictNodes: false
+  # ExitNodes:
+  #   - "{us}"
+  #   - "{de}"
+  # ExcludeNodes:
+  #   - "{cn}"
+  #   - "{ru}"
+  EnforceDistinctSubnets: true
+  
+  # Monitoring configuration
+  EnableMetrics: true
+  MetricsPort: 9052
+  HealthCheckInterval: 30s
+  
+  # Client configuration
+  ClientConfig:
+    # Connection settings
+    ConnectTimeout: 30s
+    ReadTimeout: 60s
+    WriteTimeout: 60s
+    
+    # Retry settings
+    MaxRetries: 3
+    RetryDelay: 5s
+    BackoffMultiplier: 2.0
+    
+    # Circuit preferences
+    # PreferredExitNodes:
+    #   - "{us}"
+    #   - "{de}"
+    # AvoidNodes:
+    #   - "{cn}"
+    RequireIPv6: false
+    
+    # Anonymity settings
+    IsolateDestAddr: true
+    IsolateDestPort: false
+    IsolateClientAddr: true
+    IsolateClientProtocol: false
+    
+    # Performance settings
+    CircuitPriority: 1
+    StreamIsolation: true
+    OptimisticData: true
+
+# Logging configuration
+Log:
+  ServiceName: teamgram-tor
+  Mode: console
+  Level: info
+  Compress: false
+  KeepDays: 7
+  StackCooldownMillis: 100

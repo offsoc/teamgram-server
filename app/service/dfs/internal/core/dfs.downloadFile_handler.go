@@ -122,7 +122,7 @@ func (c *DfsCore) DfsDownloadFile(in *dfs.TLDfsDownloadFile) (*mtproto.Upload_Fi
 			sType = int32(location.GetAccessHash() >> 32)
 		}
 		if err != nil {
-			// log.Warnf("download file: %v", err)
+			// log.Errorf("download file: %v", err)
 			err = nil
 			bytes = []byte{}
 		}

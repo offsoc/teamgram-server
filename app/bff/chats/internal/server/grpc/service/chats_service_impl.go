@@ -331,3 +331,183 @@ func (s *Service) MessagesCreateChat9CB126E(ctx context.Context, request *mtprot
 	c.Logger.Debugf("messages.createChat9CB126E - reply: {%s}", r)
 	return r, err
 }
+
+// ChannelsCreateChannel
+// channels.createChannel#3d5fb10f flags:# broadcast:flags.0?true megagroup:flags.1?true private:flags.2?true for_import:flags.3?true forum:flags.5?true title:string about:flags.4?string geo_point:flags.6?InputGeoPoint address:flags.7?string ttl_period:flags.8?int = Updates;
+func (s *Service) ChannelsCreateChannel(ctx context.Context, request *mtproto.TLChannelsCreateChannel) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.createChannel - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsCreateChannel(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.createChannel - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsEditTitle
+// channels.editTitle#566decd0 channel:InputChannel title:string = Updates;
+func (s *Service) ChannelsEditTitle(ctx context.Context, request *mtproto.TLChannelsEditTitle) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.editTitle - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsEditTitle(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.editTitle - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsEditPhoto
+// channels.editPhoto#f12e57c9 channel:InputChannel photo:InputChatPhoto = Updates;
+func (s *Service) ChannelsEditPhoto(ctx context.Context, request *mtproto.TLChannelsEditPhoto) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.editPhoto - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsEditPhoto(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.editPhoto - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsEditAbout
+// channels.editAbout#13e27f1e channel:InputChannel about:string = Bool;
+func (s *Service) ChannelsEditAbout(ctx context.Context, request interface{}) (*mtproto.Bool, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.editAbout - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsEditAbout(request.(*core.TLChannelsEditAbout))
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.editAbout - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsInviteToChannel
+// channels.inviteToChannel#199f3a6c channel:InputChannel users:Vector<InputUser> = Updates;
+func (s *Service) ChannelsInviteToChannel(ctx context.Context, request interface{}) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.inviteToChannel - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsInviteToChannel(request.(*core.TLChannelsInviteToChannel))
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.inviteToChannel - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsUpdateUsername
+// channels.updateUsername#3514b3de channel:InputChannel username:string = Bool;
+func (s *Service) ChannelsUpdateUsername(ctx context.Context, request *mtproto.TLChannelsUpdateUsername) (*mtproto.Bool, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.updateUsername - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsUpdateUsername(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.updateUsername - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsToggleSignatures
+// channels.toggleSignatures#1b8f7452 channel:InputChannel enabled:Bool = Updates;
+func (s *Service) ChannelsToggleSignatures(ctx context.Context, request *mtproto.TLChannelsToggleSignatures) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.toggleSignatures - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsToggleSignatures(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.toggleSignatures - reply: {%s}", r)
+	return r, err
+}
+
+// ChannelsGetMessages
+// channels.getMessages#ad8c9a23 channel:InputChannel id:Vector<InputMessage> = messages.Messages;
+func (s *Service) ChannelsGetMessages(ctx context.Context, request *mtproto.TLChannelsGetMessages) (*mtproto.Messages_Messages, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("channels.getMessages - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.ChannelsGetMessages(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("channels.getMessages - reply: {%s}", r)
+	return r, err
+}
+
+// MessagesGetMessageReactionsList
+// messages.getMessageReactionsList#461b3f48 flags:# peer:InputPeer id:int reaction:flags.0?Reaction offset:flags.1?string limit:int = messages.MessageReactionsList;
+func (s *Service) MessagesGetMessageReactionsList(ctx context.Context, request *mtproto.TLMessagesGetMessageReactionsList) (*mtproto.Messages_MessageReactionsList, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("messages.getMessageReactionsList - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.MessagesGetMessageReactionsList(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("messages.getMessageReactionsList - reply: {%s}", r)
+	return r, err
+}
+
+// MessagesSendReaction
+// messages.sendReaction#d30d78d4 flags:# big:flags.1?true add_to_recent:flags.2?true peer:InputPeer msg_id:int reaction:flags.0?Vector<Reaction> = Updates;
+func (s *Service) MessagesSendReaction(ctx context.Context, request *mtproto.TLMessagesSendReaction) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("messages.sendReaction - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.MessagesSendReaction(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("messages.sendReaction - reply: {%s}", r)
+	return r, err
+}
+
+// MessagesSendVote
+// messages.sendVote#10ea6184 peer:InputPeer msg_id:int options:Vector<bytes> = Updates;
+func (s *Service) MessagesSendVote(ctx context.Context, request *mtproto.TLMessagesSendVote) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("messages.sendVote - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.MessagesSendVote(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("messages.sendVote - reply: {%s}", r)
+	return r, err
+}
+
+// MessagesGetPollResults
+// messages.getPollResults#73bb643b flags:# peer:InputPeer msg_id:int = Updates;
+func (s *Service) MessagesGetPollResults(ctx context.Context, request *mtproto.TLMessagesGetPollResults) (*mtproto.Updates, error) {
+	c := core.New(ctx, s.svcCtx)
+	c.Logger.Debugf("messages.getPollResults - metadata: {%s}, request: {%s}", c.MD, request)
+
+	r, err := c.MessagesGetPollResults(request)
+	if err != nil {
+		return nil, err
+	}
+
+	c.Logger.Debugf("messages.getPollResults - reply: {%s}", r)
+	return r, err
+}

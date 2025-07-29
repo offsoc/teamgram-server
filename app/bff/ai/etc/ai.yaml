@@ -1,0 +1,175 @@
+# Teamgram AI Service Configuration
+
+Name: teamgram.ai
+ListenOn: 0.0.0.0:8081
+Mode: dev
+MetricsUrl: http://127.0.0.1:9092/metrics
+Prometheus:
+  Host: 127.0.0.1
+  Port: 9092
+  Path: /metrics
+
+# AI Service Configuration
+AI:
+  # Basic settings
+  Enabled: true
+  MaxConcurrentRequests: 100
+  RequestTimeout: 30s
+  
+  # LLM Configuration
+  LLMConfig:
+    # Provider configurations
+    OpenAIConfig:
+      APIKey: "your-openai-api-key-here"
+      BaseURL: "https://api.openai.com/v1"
+      Models:
+        - "gpt-4"
+        - "gpt-4-turbo"
+        - "gpt-3.5-turbo"
+      MaxTokens: 4096
+      Temperature: 0.7
+      Enabled: true
+    
+    AnthropicConfig:
+      APIKey: "your-anthropic-api-key-here"
+      BaseURL: "https://api.anthropic.com/v1"
+      Models:
+        - "claude-3-opus-20240229"
+        - "claude-3-sonnet-20240229"
+        - "claude-3-haiku-20240307"
+      MaxTokens: 4096
+      Temperature: 0.7
+      Enabled: false
+    
+    GoogleConfig:
+      APIKey: "your-google-api-key-here"
+      BaseURL: "https://generativelanguage.googleapis.com/v1beta"
+      Models:
+        - "gemini-1.5-pro"
+        - "gemini-1.5-flash"
+        - "gemini-pro"
+      MaxTokens: 4096
+      Temperature: 0.7
+      Enabled: false
+    
+    # Default settings
+    DefaultModel: "gpt-4"
+    DefaultMaxTokens: 2048
+    DefaultTemperature: 0.7
+    
+    # Performance settings
+    RequestTimeout: 30s
+    MaxRetries: 3
+    RetryDelay: 1s
+    
+    # Load balancing
+    LoadBalanceStrategy: "round_robin"
+    FailoverEnabled: true
+    
+    # Caching
+    EnableCaching: true
+    CacheSize: 1000
+    CacheTTL: 1h
+  
+  # Vision Configuration
+  VisionConfig:
+    Enabled: true
+    MaxImageSize: 10485760  # 10MB
+    SupportedFormats:
+      - "jpg"
+      - "jpeg"
+      - "png"
+      - "gif"
+      - "webp"
+    MaxResolution: "4096x4096"
+    EnableFaceDetection: true
+    EnableObjectDetection: true
+    EnableOCR: true
+    EnableNSFW: true
+    ProcessingTimeout: 30s
+  
+  # Speech Configuration
+  SpeechConfig:
+    Enabled: true
+    MaxAudioSize: 52428800  # 50MB
+    MaxDuration: 600        # 10 minutes
+    SupportedFormats:
+      - "mp3"
+      - "wav"
+      - "ogg"
+      - "m4a"
+    EnableSTT: true         # Speech to Text
+    EnableTTS: true         # Text to Speech
+    EnableMusicAnalysis: false
+    ProcessingTimeout: 60s
+    AudioSampleRate: 44100
+  
+  # Multimodal Configuration
+  MultimodalConfig:
+    Enabled: true
+    MaxFileSize: 104857600  # 100MB
+    SupportedFormats:
+      - "jpg"
+      - "png"
+      - "gif"
+      - "mp4"
+      - "mp3"
+      - "wav"
+      - "txt"
+    ProcessingTimeout: 60s
+    ImageMaxWidth: 4096
+    ImageMaxHeight: 4096
+    AudioSampleRate: 44100
+    VideoMaxDuration: 300   # 5 minutes
+    MaxConcurrentJobs: 10
+    EnableGPU: false
+    EnableCaching: true
+  
+  # Moderation Configuration
+  ModerationConfig:
+    Enabled: true
+    EnableTextModeration: true
+    EnableImageModeration: true
+    EnableAudioModeration: false
+    EnableVideoModeration: false
+    
+    # Thresholds (0.0 to 1.0)
+    ToxicityThreshold: 0.7
+    NSFWThreshold: 0.8
+    SpamThreshold: 0.6
+    HateSpeechThreshold: 0.8
+    
+    # Actions
+    AutoBlock: false
+    AutoWarn: true
+    RequireReview: true
+    
+    # Performance
+    ProcessingTimeout: 10s
+    MaxConcurrentChecks: 20
+    EnableCaching: true
+    CacheTTL: 1h
+  
+  # Performance settings
+  EnableCaching: true
+  CacheSize: 1000
+  CacheTTL: 1h
+  
+  # Rate limiting
+  EnableRateLimit: true
+  RequestsPerSecond: 10
+  BurstSize: 20
+  
+  # Monitoring
+  EnableMetrics: true
+  MetricsPort: 9053
+  HealthCheckInterval: 30s
+
+# Logging configuration
+Log:
+  ServiceName: teamgram-ai
+  Mode: console
+  Level: info
+  Compress: false
+  KeepDays: 7
+  StackCooldownMillis: 100

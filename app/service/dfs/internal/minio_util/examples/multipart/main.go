@@ -86,10 +86,8 @@ func SaveFilePart(creator, fileId int64, filePart int32, b []byte) error {
 		state.uploadID,
 		int(filePart),
 		bytes.NewReader(b),
-		int64(filePart),
-		"",
-		"",
-		nil)
+		int64(len(b)),
+		minio.PutObjectPartOptions{})
 
 	if err != nil {
 		logx.Errorf("error - %v", err)
@@ -140,10 +138,8 @@ func main() {
 			uploadID,
 			i+1,
 			bytes.NewReader(b[i*partSize:(i+1)*partSize]),
-			partSize,
-			"",
-			"",
-			nil)
+			int64(partSize),
+			minio.PutObjectPartOptions{})
 
 		if err != nil {
 			logx.Errorf("error - %v", err)
@@ -165,9 +161,7 @@ func main() {
 			i,
 			bytes.NewReader(b[i*partSize:]),
 			int64(lastSize),
-			"",
-			"",
-			nil)
+			minio.PutObjectPartOptions{})
 
 		if err != nil {
 			logx.Errorf("error - %v", err)

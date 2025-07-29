@@ -58,7 +58,7 @@ func (m *MessageDeDuplicate) HasDuplicateMessage(ctx context.Context, senderUser
 		return false, err
 	}
 
-	if _, err = m.kv.ExpireCtx(ctx, k, expireTimeout); err != nil {
+	if err = m.kv.ExpireCtx(ctx, k, expireTimeout); err != nil {
 		logx.WithContext(ctx).Errorf("expire DuplicateMessage - EXPIRE {%s, %d}, error: %s", k, expireTimeout, err)
 		return false, err
 	}
