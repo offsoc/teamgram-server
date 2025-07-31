@@ -37,7 +37,7 @@ func (c *StatusCore) StatusSetSessionOnline(in *status.TLStatusSetSessionOnline)
 		return nil, err
 	}
 
-	_, err = c.svcCtx.Dao.KV.ExpireCtx(
+	err = c.svcCtx.Dao.KV.ExpireCtx(
 		c.ctx,
 		userK,
 		c.svcCtx.Config.StatusExpire)

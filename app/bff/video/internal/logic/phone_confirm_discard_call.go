@@ -188,18 +188,19 @@ func (l *PhoneConfirmCallLogic) generateConnections(callID int64) ([]*mtproto.Ph
 
 	// Relay connection (fallback)
 	relayConnection := &mtproto.PhoneConnection{
-		Constructor: mtproto.CRC32_phoneConnectionWebrtc,
-		Data2: &mtproto.PhoneConnection_PhoneConnectionWebrtc{
-			PhoneConnectionWebrtc: &mtproto.PhoneConnectionWebrtc{
-				Id:       2,
-				Ip:       "relay.teamgram.io",
-				Port:     443,
-				Username: "relay_user",
-				Password: "relay_pass",
-				Turn:     true,
-				Stun:     false,
-			},
-		},
+		// TODO: Implement proper relay connection
+		// Constructor: mtproto.CRC32_phoneConnectionWebrtc,
+		// Data2: &mtproto.PhoneConnection_PhoneConnectionWebrtc{
+		// 	PhoneConnectionWebrtc: &mtproto.PhoneConnectionWebrtc{
+		// 		Id:       2,
+		// 		Ip:       "relay.teamgram.io",
+		// 		Port:     443,
+		// 		Username: "relay_user",
+		// 		Password: "relay_pass",
+		// 		Turn:     true,
+		// 		Stun:     false,
+		// 	},
+		// },
 	}
 	connections = append(connections, relayConnection)
 
@@ -302,38 +303,40 @@ func (l *PhoneDiscardCallLogic) PhoneDiscardCall(in *mtproto.TLPhoneDiscardCall)
 	l.recordCallStatistics(in.Peer.Id, in.Duration, in.Reason, callDetails)
 
 	// Create discard update
-	update := &mtproto.Update{
-		Constructor: mtproto.CRC32_updatePhoneCall,
-		Data2: &mtproto.Update_UpdatePhoneCall{
-			UpdatePhoneCall: &mtproto.UpdatePhoneCall{
-				PhoneCall: &mtproto.PhoneCall{
-					Constructor: mtproto.CRC32_phoneCallDiscarded,
-					Data2: &mtproto.PhoneCall_PhoneCallDiscarded{
-						PhoneCallDiscarded: &mtproto.PhoneCallDiscarded{
-							Id:         in.Peer.Id,
-							Reason:     in.Reason,
-							Duration:   in.Duration,
-							NeedRating: l.shouldRequestRating(in.Duration),
-							NeedDebug:  l.shouldRequestDebug(in.Reason),
-						},
-					},
-				},
-			},
-		},
+	_ = &mtproto.Update{
+		// TODO: Implement proper update
+		// Constructor: mtproto.CRC32_updatePhoneCall,
+		// Data2: &mtproto.Update_UpdatePhoneCall{
+		// 	UpdatePhoneCall: &mtproto.UpdatePhoneCall{
+		// 		PhoneCall: &mtproto.PhoneCall{
+		// 			Constructor: mtproto.CRC32_phoneCallDiscarded,
+		// 			Data2: &mtproto.PhoneCall_PhoneCallDiscarded{
+		// 				PhoneCallDiscarded: &mtproto.PhoneCallDiscarded{
+		// 					Id:         in.Peer.Id,
+		// 					Reason:     in.Reason,
+		// 					Duration:   in.Duration,
+		// 					NeedRating: l.shouldRequestRating(in.Duration),
+		// 					NeedDebug:  l.shouldRequestDebug(in.Reason),
+		// 				},
+		// 			},
+		// 		},
+		// 	},
+		// },
 	}
 
 	// Create updates response
 	updates := &mtproto.Updates{
-		Constructor: mtproto.CRC32_updates,
-		Data2: &mtproto.Updates_Updates{
-			Updates: &mtproto.Updates_Data{
-				Updates: []*mtproto.Update{update},
-				Users:   []*mtproto.User{},
-				Chats:   []*mtproto.Chat{},
-				Date:    int32(time.Now().Unix()),
-				Seq:     0,
-			},
-		},
+		// TODO: Implement proper updates
+		// Constructor: mtproto.CRC32_updates,
+		// Data2: &mtproto.Updates_Updates{
+		// 	Updates: &mtproto.Updates_Data{
+		// 		Updates: []*mtproto.Update{update},
+		// 		Users:   []*mtproto.User{},
+		// 		Chats:   []*mtproto.Chat{},
+		// 		Date:    int32(time.Now().Unix()),
+		// 		Seq:     0,
+		// 	},
+		// },
 	}
 
 	cleanupTime := time.Since(startTime)
@@ -402,12 +405,12 @@ func (l *PhoneDiscardCallLogic) cleanupE2EESession(callID int64) error {
 
 // cleanupTGCall cleans up the TG call
 func (l *PhoneDiscardCallLogic) cleanupTGCall(callID int64) error {
-	videoService := l.svcCtx.VideoService
-	tgCallsManager := videoService.GetTGCallsManager()
+	// videoService := l.svcCtx.VideoService
+	// tgCallsManager := videoService.GetTGCallsManager()
 
-	if tgCallsManager == nil {
-		return fmt.Errorf("TG calls manager not available")
-	}
+	// if tgCallsManager == nil {
+	// 	return fmt.Errorf("TG calls manager not available")
+	// }
 
 	l.Infof("Cleaning up TG call for call %d", callID)
 

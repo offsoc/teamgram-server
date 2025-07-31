@@ -296,7 +296,7 @@ func (s *VideoBFFService) Stop() error {
 
 	// Stop managers
 	if s.tgCallsManager != nil {
-		s.tgCallsManager.Stop()
+		// s.tgCallsManager.Stop()
 	}
 
 	if s.webrtcManager != nil {
